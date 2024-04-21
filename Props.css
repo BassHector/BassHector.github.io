@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+}
+
+.MainContainer {
+    display: flex;
+    height: 100vh;
+    width: 300vw;
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(158,0,255,1) 100%);
+}
+
+.BrownBlock {
+    height: 100px;
+    width: 100px;
+    background: rgb(73,49,2);
+    background: linear-gradient(147deg, rgba(73,49,2,1) 33%, rgba(255,192,0,1) 100%);
+    border-radius: 10px;
+}
+
+.YellowBlock {
+    height: 100px;
+    width: 100px;
+    background: rgb(205,213,0);
+    background: linear-gradient(140deg, rgba(205,213,0,1) 54%, rgba(146,255,0,1) 100%);
+    border-radius: 10px;
+}
