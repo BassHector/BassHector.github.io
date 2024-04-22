@@ -27,7 +27,8 @@ let navBarText = document.createElement("div");
 navBarText.style.position = "relative";
 navBarText.style.width = `${(window.innerWidth  * 0.2)}px`;
 navBarText.style.height = `${(window.innerHeight  * 0.02)}px`;
-navBarText.style.backgroundColor = `white`;
+navBarText.style.textAlign = "center";
+navBarText.style.color = `white`;
 navBarText.style.marginLeft = `${(window.innerWidth * 0.1) - (navBarText.style.width /2)}px`;
 navBarText.style.top = `${window.innerHeight  * 0.04}px`;
 navBarText.style.zIndex = "1";
@@ -48,8 +49,8 @@ navBar.appendChild(navBarPin)
 
 let sunMask = document.createElement("div");
 sunMask.style.position = "fixed";
-sunMask.style.width = `220px`;
-sunMask.style.height = `110%`;
+sunMask.style.width = `2%`;
+sunMask.style.height = `100%`;
 sunMask.style.top = '0';
 sunMask.style.backgroundImage = `url(/images/SunMask.png)`;
 sunMask.style.backgroundPosition = "center";
@@ -129,22 +130,37 @@ class planets {
                 break;
         }
         this.planet.style.position = `fixed`;
-        this.planet.style.marginLeft = `${(mainContainerBounds.width / 9) * (i + 1)}px`;
+        this.planet.style.marginLeft = `${(((mainContainerBounds.width + parseFloat(this.planet.style.height)) / 9) * (i + 1))}px`;
         this.planet.style.marginTop = `${(mainContainerBounds.height / 2) - (parseFloat(this.planet.style.height)/2)}px`;
     }
 }
 
 let sectionLength = mainContainerBounds.width / 8;
+let previousSection = 0;
+
+let activePlanet;
 function planetOrbit(DivElement, index) {
-console.log(DivElement.planet.style.height)
-    if ((parseFloat(DivElement.planet.style.marginLeft) - (window.innerWidth)) + parseFloat(DivElement.planet.style.height) < Math.abs(megaMove)) {
-
-        gsap.to(DivElement.planet, { y: 0, duration: 0.5, ease: "Power1.easeOut" });
-    } else  {
-        gsap.to(DivElement.planet, { y: 1000, duration: 1 });
-    }
-
+    let sectionPart = Math.round(Math.abs(sectionLength * index))
+    // console.log("index",index, "----",Math.round(Math.abs(sectionLength * index)));
+    // console.log("mega", Math.abs(megaMove))
+    // if (sectionPart > Math.abs(megaMove) && sectionPart < (Math.abs(megaMove) + (window.innerWidth/2))) {
+    //     console.log(DivElement.id)
+    //
+    // }
 }
+// function planetOrbit(DivElement, index) {
+//     if ((parseFloat(DivElement.planet.style.marginLeft) - (window.innerWidth)) < Math.abs(megaMove)) {
+//         gsap.to(DivElement.planet, { y: 0, duration: 0.5, ease: "Power1.easeOut" });
+//         console.log(DivElement)
+//         if(Math.abs(megaMove) > previousSection) {
+//             previousSection += sectionLength;
+//             navBarText.textContent = `${DivElement.id}`;
+//         }
+//     } else if((parseFloat(DivElement.planet.style.marginLeft) + (window.innerWidth)) - parseFloat(DivElement.planet.style.height)){
+//         gsap.to(DivElement.planet, { y: 1000, duration: 0.5 });
+//     }
+//
+// }
 
 function moveContainer (delta) {
     megaMove += delta;
