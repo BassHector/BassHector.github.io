@@ -1,21 +1,41 @@
+@font-face {
+    font-family: 'Elianto-Regular';
+    src: url('/fonts/Elianto/Elianto-Regular.ttf');
+}
+
+
 * {
     box-sizing: border-box;
+    font-family: "Elianto-Regular", sans-serif;
 }
 
 body,html {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-y: hidden;
+
 }
 
 .MainContainer {
-    display: block;
+    position: fixed;
     height: 100vh;
     width: 500vw;
-    background-image: url("/images/hugeSpaceBurn.png");
+    background-image: url("/images/hugeSpaceBurn2.png");
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
+
+.Conveyor{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-image: url("/images/hugeSunConveyor.png");
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
 
 .BrownBlock {
     height: 100px;
