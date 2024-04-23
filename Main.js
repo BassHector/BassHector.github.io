@@ -29,6 +29,7 @@ addEventListener("DOMContentLoaded", (event) => {
     navBarText.style.width = `${(window.innerWidth * 0.2)}px`;
     navBarText.style.height = `${(window.innerHeight * 0.02)}px`;
     navBarText.style.textAlign = "center";
+
     navBarText.style.fontSize = "4rem";
     navBarText.style.color = `white`;
     navBarText.style.marginLeft = `${(window.innerWidth * 0.1) - (navBarText.style.width / 2)}px`;
@@ -40,8 +41,8 @@ addEventListener("DOMContentLoaded", (event) => {
 
     let navBarPin = document.createElement("div");
     navBarPin.style.position = "relative";
-    navBarPin.style.width = `${(parseFloat(navBar.style.height) * 1.5)}px`;
-    navBarPin.style.height = `${(parseFloat(navBar.style.height) * 1.5)}px`;
+    navBarPin.style.width = `${(parseFloat(navBar.style.height) * 2)}px`;
+    navBarPin.style.height = `${(parseFloat(navBar.style.height) * 2)}px`;
     navBarPin.style.borderRadius = "50%";
     navBarPin.style.left = `${navBar.style.left - (parseFloat(navBar.style.height) / 2)}px`;
     navBarPin.style.top = `${parseFloat(navBar.style.top) - (parseFloat(navBar.style.height) * 1.25)}px`;
@@ -153,10 +154,16 @@ addEventListener("DOMContentLoaded", (event) => {
         if (parseFloat(DivElement.planet.style.marginLeft) + (parseFloat(DivElement.planet.style.width) / 2) > Math.abs(megaMove) && Math.abs(megaMove) > parseFloat(DivElement.planet.style.marginLeft) - (window.innerWidth / 2)) {
             console.log(DivElement.id);
             navBarText.textContent = DivElement.id;
-            navBarPin.style.width = `${(parseFloat(navBar.style.height) * 1.5)}px`;
-            navBarPin.style.height = `${(parseFloat(navBar.style.height) * 1.5)}px`;
+            navBarPin.style.top = `${parseFloat(navBar.style.top) - (parseFloat(navBar.style.height) * 1.5)}px`;
+            navBarPin.style.width = `${(parseFloat(navBar.style.height) * 2)}px`;
+            navBarPin.style.height = `${(parseFloat(navBar.style.height) * 2)}px`;
             navBarPin.style.backgroundImage = `url(/images/${DivElement.id}pin.png)`;
             // Saturn's pin png is a smaller small cuz of size so....
+            if(DivElement.id === "Saturn"){
+                navBarPin.style.width = `${(parseFloat(navBar.style.height) * 3)}px`;
+                navBarPin.style.height = `${(parseFloat(navBar.style.height) * 3)}px`;
+                navBarPin.style.top = `${parseFloat(navBar.style.top) - (parseFloat(navBar.style.height) * 2)}px`;
+            }
         }
         if (megaMove === 0) {
             navBarText.textContent = "The Sun";
