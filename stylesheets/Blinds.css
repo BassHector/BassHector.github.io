@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 body,html {
@@ -14,28 +14,36 @@ body,html {
     display: none;
     height: auto;
 }
+
+#backward{
+    background-color: green;
+    z-index: 10;
+}
+
 #forward{
     background-color: red;
     z-index: 10;
 }
 
-#megaBox1{
+#megaBox0{
     position: fixed;
     display: flex;
     z-index: 4
 }
 
-#megaBox2{
-    position: absolute;
+#megaBox1{
+    position: fixed;
+    display: flex;
     z-index: 3
 }
 
-#megaBox3{
-    position: absolute;
+#megaBox2{
+    position: fixed;
+    display: flex;
     z-index: 2;
 }
 
-#megaBox4{
+#megaBox3{
     position: absolute;
     display: flex;
     z-index: 1;
