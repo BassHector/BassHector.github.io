@@ -51,6 +51,9 @@ addEventListener("DOMContentLoaded", (event) => {
     navBarPin.style.backgroundImage = "url(/images/SunPin.png)";
     navBarPin.style.backgroundSize = "cover";
     navBarPin.style.backgroundRepeat = "no-repeat";
+    navBarPin.addEventListener("click", (e) =>{
+        window.location.href = "pages/Shutter.html"
+    })
 
 
 

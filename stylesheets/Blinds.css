@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+body,html {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+#canvas {
+    display: none;
+    height: auto;
+}
+#forward{
+    background-color: red;
+    z-index: 10;
+}
+
+#megaBox1{
+    position: fixed;
+    display: flex;
+    z-index: 4
+}
+
+#megaBox2{
+    position: absolute;
+    z-index: 3
+}
+
+#megaBox3{
+    position: absolute;
+    z-index: 2;
+}
+
+#megaBox4{
+    position: absolute;
+    display: flex;
+    z-index: 1;
+}
