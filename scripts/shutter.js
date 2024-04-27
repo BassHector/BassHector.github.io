@@ -4,6 +4,7 @@ const indent0 = document.getElementById("indent0");
 const indent1 = document.getElementById("indent1");
 const indent2 = document.getElementById("indent2");
 const indent3 = document.getElementById("indent3");
+
 let currentPanel = 0;
 let layer = 0;
 const slides = 10
@@ -16,19 +17,21 @@ let canvasHorizontal = document.getElementById("canvasHorizontal")
 canvasHorizontal.width = window.innerWidth
 canvasHorizontal.height = slidesHeight
 
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
-
 let ctxH,ctxV;
 ctxV = canvasVertical.getContext("2d");
 ctxH = canvasHorizontal.getContext("2d");
 
 let imageArray =[]
 let slidesArray = []
+const textArray = ["Spring", "Summer", "Fall", "Winter"]
+
+let panning;
 
 
 
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
 
 for(let i = 0; i < 4; i++) {
     let image = new Image();
@@ -66,12 +69,18 @@ document.body.onload = () => {
             }
 
         }
+        console.log(textArray[imageIndex])
+        let lettersToInsert = []
+        for (let i = 0; i < textArray[imageIndex].length; i++) {
+            lettersToInsert.push(textArray[imageIndex][i])
+        }
         for(let i = 0; i < slides; i++) {
             let slidePanelWrapper = document.createElement("div")
             slidePanelWrapper.id = `slidePanelWrapper${currentPanel}`;
             let slidePanel = document.createElement("div")
             slidePanel.id = `slidePanel${currentPanel}`;
             slidePanel.style.backgroundImage = `url(${slidesArray[currentPanel]})`;
+
             if (imageIndex % 2 === 0) {
                 slidePanel.style.height = `${window.innerHeight}px`;
                 slidePanel.style.width = `${slidesWidth}px`;
@@ -89,43 +98,22 @@ document.body.onload = () => {
             currentPanel++;
         }
     })
+    panning = setInterval(() => {
+            if (layer === 3){
+                setupInterval(0, 7500)
+            }
+            if (layer !== 3){
+                setupInterval(layer + 1, 7500)
+            }
+    },5000)
+    setColor(0)
 }
-
-// forwardsBtn.addEventListener("click", (e) =>{
-//     layer = clamp(layer, 0, 3)
-//     for(let i = layer * slides; i < slides * (layer + 1); i++) {
-//         let panelIndex = i % 10;
-//         let delay = (panelIndex + 1) * 0.1;
-//         if (layer % 2 !== 0) {
-//             gsap.to(`#slidePanel${i}`, {rotateX: 90, delay: delay});
-//         } else {
-//             gsap.to(`#slidePanel${i}`, {rotateY: 90, delay: delay});
-//         }
-//
-//
-//     }
-//     layer++
-// })
-// backwardsBtn.addEventListener("click", (e) =>{
-//     layer--
-//     layer = clamp(layer, 0, 3)
-//     for(let i = layer * slides; i < slides * (layer + 1); i++) {
-//         let panelIndex = i % 10;
-//         let delay = (panelIndex + 1) * 0.1;
-//         if (layer % 2 !== 0) {
-//             gsap.to(`#slidePanel${i}`, {rotateX: 0, delay: delay});
-//         } else {
-//             gsap.to(`#slidePanel${i}`, {rotateY: 0, delay: delay});
-//         }
-//
-//     }
-// })
 
 function swapPanel (btnIndex) {
     if (btnIndex > layer) {
         let totalPanels = (btnIndex - layer) * slides;
         for (let i = layer * slides; i < slides * btnIndex; i++) {
-            let panelIndex = i % totalPanels;
+            let panelIndex = Math.abs(i % totalPanels);
             let delay = (panelIndex + 1) * 0.1;
             if (Math.floor(i / slides) % 2 !== 0) {
                 gsap.to(`#slidePanel${i}`, {rotateX: 90, delay: delay});
@@ -139,7 +127,7 @@ function swapPanel (btnIndex) {
         let totalPanels = (btnIndex - layer) * slides;
         for (let i = layer * slides; i > (slides * btnIndex) - 1; i--) {
             let panelIndex = Math.abs(i % totalPanels);
-            let delay = (panelIndex + 1) * 0.1;
+            let delay = (panelIndex - 1) * 0.1;
             if (Math.floor(i / slides) % 2 !== 0) {
                 gsap.to(`#slidePanel${i}`, {rotateX: 0, delay: delay});
             } else {
@@ -150,57 +138,61 @@ function swapPanel (btnIndex) {
     layer = btnIndex;
 }
 
-function setColor(index) {
-    document.getElementById(`indent${index}`).onclick = function() {
-    this.classList.toggle('active');
-};
+function setColor(index){
+    for (let i = 0; i < 4; i++) {
+        let divToChange = document.getElementById(`indent${i}`);
+        divToChange.style.backgroundColor = "";
+        divToChange.style.opacity = "";
+        if (i === index){
+            divToChange.style.opacity = "1";
+            switch (index) {
+                case 0:
+                    divToChange.style.backgroundColor = "#a4c25e";
+                    break;
+                case 1:
+                    divToChange.style.backgroundColor = "#ebe36b";
+                    break;
+                case 2:
+                    divToChange.style.backgroundColor = "#ff6b32";
+                    break;
+                case 3:
+                    divToChange.style.backgroundColor = "#9cbbd8";
+                    break;
+                default:
+                    divToChange.style.backgroundColor = "gray";
+            }
+        }
 
-
-    // for (let i = 0; i < 4; i++) {
-    //     let divToChange = document.getElementById(`indent${index}`);
-    //     divToChange.style.backgroundColor = "";
-    //     divToChange.style.opacity = "";
-    //     console.log(index)
-    //     if (i === index){
-    //         divToChange.style.opacity = "1";
-    //         switch (index) {
-    //             case 0:
-    //                 divToChange.style.backgroundColor = "#a4c25e";
-    //                 break;
-    //             case 1:
-    //                 divToChange.style.backgroundColor = "#ebe36b";
-    //                 break;
-    //             case 2:
-    //                 divToChange.style.backgroundColor = "#e28546";
-    //                 break;
-    //             case 3:
-    //                 divToChange.style.backgroundColor = "#9cbbd8";
-    //                 break;
-    //             default:
-    //                 divToChange.style.backgroundColor = "gray";
-    //         }
-    //     }
-    //
-    // }
+    }
 
 }
 
-indent0.addEventListener("click", (e) =>{
-    swapPanel(0)
-    setColor(0)
-})
+function setupInterval(index, milliseconds) {
+    swapPanel(index);
+    setColor(index);
+    clearInterval(panning);
 
-indent1.addEventListener("click", (e) =>{
-    swapPanel(1)
-    setColor(1)
-})
+    setTimeout(() => {
+        panning = setInterval(() => {
+            if (layer === 3) {
+                setColor(0);
+                swapPanel(0);
+            } else {
+                setColor(layer + 1);
+                swapPanel(layer + 1);
+            }
+        }, milliseconds);
+    })
+}
+indent0.addEventListener("click", () => setupInterval(0, 15000));
+indent1.addEventListener("click", () => setupInterval(1, 15000));
+indent2.addEventListener("click", () => setupInterval(2, 15000));
+indent3.addEventListener("click", () => setupInterval(3, 15000));
 
-indent2.addEventListener("click", (e) =>{
-    swapPanel(2)
-    setColor(2)
-})
+window.addEventListener('blur', function() {
+    clearInterval(panning);
+});
 
-indent3.addEventListener("click", (e) =>{
-    swapPanel(3)
-    setColor(3)
-})
+window.addEventListener('focus', function() {
+    setupInterval(layer, 15000)
+});
