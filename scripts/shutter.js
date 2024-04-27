@@ -1,18 +1,29 @@
 const backwardsBtn   = document.getElementById("backward");
 const forwardsBtn = document.getElementById("forward");
+const indent0 = document.getElementById("indent0");
+const indent1 = document.getElementById("indent1");
+const indent2 = document.getElementById("indent2");
+const indent3 = document.getElementById("indent3");
 let currentPanel = 0;
 let layer = 0;
 const slides = 10
-const slidesWidth = window.innerWidth / slides
-let canvas = document.getElementById("canvas")
-canvas.width = slidesWidth
-canvas.height = window.innerHeight
+const slidesHeight = window.innerHeight / slides;
+const slidesWidth = window.innerWidth / slides;
+let canvasVertical = document.getElementById("canvasVertical")
+canvasVertical.width = slidesWidth
+canvasVertical.height = window.innerHeight
+let canvasHorizontal = document.getElementById("canvasHorizontal")
+canvasHorizontal.width = window.innerWidth
+canvasHorizontal.height = slidesHeight
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
-let ctx;
+let ctxH,ctxV;
+ctxV = canvasVertical.getContext("2d");
+ctxH = canvasHorizontal.getContext("2d");
+
 let imageArray =[]
 let slidesArray = []
 
@@ -44,10 +55,16 @@ const open = gsap.timeline({duration: 1, paused: true, onComplete: () => open.re
 document.body.onload = () => {
     imageArray.forEach((image, imageIndex) =>{
         for (let i = 0; i < slides; i++) {
-            ctx = canvas.getContext("2d");
-            ctx.drawImage(image, (image.width / slides) * i, 0, image.width / slides, image.height, 0, 0, canvas.width, canvas.height);
-            const slideData = canvas.toDataURL("image/jpeg");
-            slidesArray.push(slideData);
+            if (imageIndex % 2 === 0) {
+                ctxV.drawImage(image, (image.width / slides) * i, 0, image.width / slides, image.height, 0, 0, canvasVertical.width, canvasVertical.height);
+                const slideData = canvasVertical.toDataURL("image/jpeg");
+                slidesArray.push(slideData);
+            } else {
+                ctxH.drawImage(image, 0, (image.height / slides) * i, image.width, image.height / slides, 0, 0, canvasHorizontal.width, canvasHorizontal.height);
+                const slideData = canvasHorizontal.toDataURL("image/jpeg");
+                slidesArray.push(slideData);
+            }
+
         }
         for(let i = 0; i < slides; i++) {
             let slidePanelWrapper = document.createElement("div")
@@ -55,8 +72,13 @@ document.body.onload = () => {
             let slidePanel = document.createElement("div")
             slidePanel.id = `slidePanel${currentPanel}`;
             slidePanel.style.backgroundImage = `url(${slidesArray[currentPanel]})`;
-            slidePanel.style.height = `${window.innerHeight}px`;
-            slidePanel.style.width = `${slidesWidth}px`;
+            if (imageIndex % 2 === 0) {
+                slidePanel.style.height = `${window.innerHeight}px`;
+                slidePanel.style.width = `${slidesWidth}px`;
+            } else {
+                slidePanel.style.height = `${slidesHeight}px`;
+                slidePanel.style.width = `${window.innerWidth}px`;
+            }
             const boxId = `megaBox${imageIndex}`;
             const boxElement = document.getElementById(boxId);
             if (boxElement) {
@@ -69,22 +91,116 @@ document.body.onload = () => {
     })
 }
 
-forwardsBtn.addEventListener("click", (e) =>{
-    layer = clamp(layer, 0, 3)
-    for(let i = layer * slides; i < slides * (layer + 1); i++) {
-        gsap.to(`#slidePanel${i}`, {rotateY: 90, delay: 0.1 * (i + 1)})
-        console.log(i)
-    }
-    layer++
-})
-backwardsBtn.addEventListener("click", (e) =>{
-    layer--
-    layer = clamp(layer, 0, 3)
-    for(let i = layer * slides; i < slides * (layer + 1); i++) {
-        gsap.to(`#slidePanel${i}`, {rotateY: 0, delay: 0.1 * (i + 1)})
-        console.log(i)
+// forwardsBtn.addEventListener("click", (e) =>{
+//     layer = clamp(layer, 0, 3)
+//     for(let i = layer * slides; i < slides * (layer + 1); i++) {
+//         let panelIndex = i % 10;
+//         let delay = (panelIndex + 1) * 0.1;
+//         if (layer % 2 !== 0) {
+//             gsap.to(`#slidePanel${i}`, {rotateX: 90, delay: delay});
+//         } else {
+//             gsap.to(`#slidePanel${i}`, {rotateY: 90, delay: delay});
+//         }
+//
+//
+//     }
+//     layer++
+// })
+// backwardsBtn.addEventListener("click", (e) =>{
+//     layer--
+//     layer = clamp(layer, 0, 3)
+//     for(let i = layer * slides; i < slides * (layer + 1); i++) {
+//         let panelIndex = i % 10;
+//         let delay = (panelIndex + 1) * 0.1;
+//         if (layer % 2 !== 0) {
+//             gsap.to(`#slidePanel${i}`, {rotateX: 0, delay: delay});
+//         } else {
+//             gsap.to(`#slidePanel${i}`, {rotateY: 0, delay: delay});
+//         }
+//
+//     }
+// })
+
+function swapPanel (btnIndex) {
+    if (btnIndex > layer) {
+        let totalPanels = (btnIndex - layer) * slides;
+        for (let i = layer * slides; i < slides * btnIndex; i++) {
+            let panelIndex = i % totalPanels;
+            let delay = (panelIndex + 1) * 0.1;
+            if (Math.floor(i / slides) % 2 !== 0) {
+                gsap.to(`#slidePanel${i}`, {rotateX: 90, delay: delay});
+            } else {
+                gsap.to(`#slidePanel${i}`, {rotateY: 90, delay: delay});
+            }
+        }
 
     }
+    if (btnIndex < layer) {
+        let totalPanels = (btnIndex - layer) * slides;
+        for (let i = layer * slides; i > (slides * btnIndex) - 1; i--) {
+            let panelIndex = Math.abs(i % totalPanels);
+            let delay = (panelIndex + 1) * 0.1;
+            if (Math.floor(i / slides) % 2 !== 0) {
+                gsap.to(`#slidePanel${i}`, {rotateX: 0, delay: delay});
+            } else {
+                gsap.to(`#slidePanel${i}`, {rotateY: 0, delay: delay});
+            }
+        }
+    }
+    layer = btnIndex;
+}
+
+function setColor(index) {
+    document.getElementById(`indent${index}`).onclick = function() {
+    this.classList.toggle('active');
+};
+
+
+    // for (let i = 0; i < 4; i++) {
+    //     let divToChange = document.getElementById(`indent${index}`);
+    //     divToChange.style.backgroundColor = "";
+    //     divToChange.style.opacity = "";
+    //     console.log(index)
+    //     if (i === index){
+    //         divToChange.style.opacity = "1";
+    //         switch (index) {
+    //             case 0:
+    //                 divToChange.style.backgroundColor = "#a4c25e";
+    //                 break;
+    //             case 1:
+    //                 divToChange.style.backgroundColor = "#ebe36b";
+    //                 break;
+    //             case 2:
+    //                 divToChange.style.backgroundColor = "#e28546";
+    //                 break;
+    //             case 3:
+    //                 divToChange.style.backgroundColor = "#9cbbd8";
+    //                 break;
+    //             default:
+    //                 divToChange.style.backgroundColor = "gray";
+    //         }
+    //     }
+    //
+    // }
+
+}
+
+indent0.addEventListener("click", (e) =>{
+    swapPanel(0)
+    setColor(0)
 })
 
+indent1.addEventListener("click", (e) =>{
+    swapPanel(1)
+    setColor(1)
+})
 
+indent2.addEventListener("click", (e) =>{
+    swapPanel(2)
+    setColor(2)
+})
+
+indent3.addEventListener("click", (e) =>{
+    swapPanel(3)
+    setColor(3)
+})
