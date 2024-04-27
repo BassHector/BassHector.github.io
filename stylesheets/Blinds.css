@@ -6,6 +6,7 @@
 
 * {
     box-sizing: border-box;
+    font-family: "Source Code Pro", serif;
     /*overflow: hidden;*/
 }
 
@@ -37,6 +38,10 @@ body,html {
 #megaBox0{
     position: fixed;
     display: flex;
+    text-align: center;
+    font-size: 3rem;
+    color: rgba(164, 194, 94, 0.5);
+    -webkit-text-stroke: 1px #000000;
     z-index: 4
 }
 

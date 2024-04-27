@@ -1,5 +1,3 @@
-const backwardsBtn   = document.getElementById("backward");
-const forwardsBtn = document.getElementById("forward");
 const indent0 = document.getElementById("indent0");
 const indent1 = document.getElementById("indent1");
 const indent2 = document.getElementById("indent2");
@@ -7,9 +5,9 @@ const indent3 = document.getElementById("indent3");
 
 let currentPanel = 0;
 let layer = 0;
-const slides = 10
-const slidesHeight = window.innerHeight / slides;
-const slidesWidth = window.innerWidth / slides;
+const slides = 20
+const slidesHeight = Math.ceil(window.innerHeight / slides);
+const slidesWidth = Math.ceil(window.innerWidth / slides);
 let canvasVertical = document.getElementById("canvasVertical")
 canvasVertical.width = slidesWidth
 canvasVertical.height = window.innerHeight
@@ -69,18 +67,21 @@ document.body.onload = () => {
             }
 
         }
-        console.log(textArray[imageIndex])
         let lettersToInsert = []
         for (let i = 0; i < textArray[imageIndex].length; i++) {
             lettersToInsert.push(textArray[imageIndex][i])
         }
+        let textStartingIndex = Math.ceil((slides + 1 - lettersToInsert.length)/2);
+        console.log(lettersToInsert)
         for(let i = 0; i < slides; i++) {
             let slidePanelWrapper = document.createElement("div")
             slidePanelWrapper.id = `slidePanelWrapper${currentPanel}`;
             let slidePanel = document.createElement("div")
             slidePanel.id = `slidePanel${currentPanel}`;
             slidePanel.style.backgroundImage = `url(${slidesArray[currentPanel]})`;
-
+            if(i >= textStartingIndex){
+                slidePanel.textContent = lettersToInsert[i - textStartingIndex];
+            }
             if (imageIndex % 2 === 0) {
                 slidePanel.style.height = `${window.innerHeight}px`;
                 slidePanel.style.width = `${slidesWidth}px`;
