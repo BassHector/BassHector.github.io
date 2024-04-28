@@ -1,6 +1,6 @@
 :root {
 
-    --navWidth: 20vw;
+    --navWidth: 80vw;
     --navHalf: calc(var(--navWidth) / -2);
 }
 
@@ -38,26 +38,42 @@ body,html {
 #megaBox0{
     position: fixed;
     display: flex;
+    /*this line height is a temp solution*/
     text-align: center;
-    font-size: 3rem;
-    color: rgba(164, 194, 94, 0.5);
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(164, 194, 94, 1);
     -webkit-text-stroke: 1px #000000;
     z-index: 4
 }
 
 #megaBox1{
     position: fixed;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(235, 227, 107, 1);
+    -webkit-text-stroke: 1px #000000;
     z-index: 3
 }
 
 #megaBox2{
     position: fixed;
     display: flex;
+
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(255, 107, 50, 1);
+    -webkit-text-stroke: 1px #000000;
     z-index: 2;
 }
 
 #megaBox3{
     position: absolute;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(156, 187, 216, 1);
+    -webkit-text-stroke: 1px #000000;
     z-index: 1;
 }
 
@@ -70,7 +86,7 @@ body,html {
     width: var(--navWidth);
     left: 50%;
     margin-left: var(--navHalf);
-    top: 90%;
+    top: 93%;
     z-index: 11;
 }
 

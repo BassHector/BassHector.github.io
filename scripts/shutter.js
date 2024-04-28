@@ -67,21 +67,21 @@ document.body.onload = () => {
             }
 
         }
+
         let lettersToInsert = []
         for (let i = 0; i < textArray[imageIndex].length; i++) {
             lettersToInsert.push(textArray[imageIndex][i])
         }
-        let textStartingIndex = Math.ceil((slides + 1 - lettersToInsert.length)/2);
-        console.log(lettersToInsert)
+
+        let textStartingIndex = Math.floor((slides + 1 - lettersToInsert.length)/2);
         for(let i = 0; i < slides; i++) {
             let slidePanelWrapper = document.createElement("div")
             slidePanelWrapper.id = `slidePanelWrapper${currentPanel}`;
             let slidePanel = document.createElement("div")
             slidePanel.id = `slidePanel${currentPanel}`;
             slidePanel.style.backgroundImage = `url(${slidesArray[currentPanel]})`;
-            if(i >= textStartingIndex){
-                slidePanel.textContent = lettersToInsert[i - textStartingIndex];
-            }
+
+
             if (imageIndex % 2 === 0) {
                 slidePanel.style.height = `${window.innerHeight}px`;
                 slidePanel.style.width = `${slidesWidth}px`;
@@ -89,14 +89,31 @@ document.body.onload = () => {
                 slidePanel.style.height = `${slidesHeight}px`;
                 slidePanel.style.width = `${window.innerWidth}px`;
             }
+
+
             const boxId = `megaBox${imageIndex}`;
             const boxElement = document.getElementById(boxId);
             if (boxElement) {
                 boxElement.appendChild(slidePanelWrapper);
             }
             slidePanelWrapper.appendChild(slidePanel)
+            if (imageIndex % 2 === 0) {
+                if(i >= textStartingIndex){
+                    slidePanel.style.lineHeight = `${1.78 * window.innerHeight}px`;
+                    slidePanel.textContent = lettersToInsert[i - textStartingIndex];
+                    slidePanel.style.textAlign = "center";
+                }
+            }
+            if (imageIndex % 2 === 1) {
+                if (i > slides * 0.8 && slides * 0.85 >= i){
+                    slidePanel.style.letterSpacing = `${slidesWidth/2}px`;
+                    slidePanel.textContent = textArray[imageIndex];
+                    slidePanel.style.textAlign = "center";
+                }
+            }
             gsap.set(`#${slidePanel.id}`, {perspective: 800})
             currentPanel++;
+            console.log(slidePanel.getBoundingClientRect())
         }
     })
     panning = setInterval(() => {
