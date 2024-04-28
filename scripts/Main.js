@@ -1,7 +1,7 @@
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollTrigger);
 
-addEventListener("DOMContentLoaded", (event) => {
+addEventListener("DOMContentLoaded", () => {
 
 
     const mainContainer = document.getElementById("mainContainer");
@@ -51,11 +51,6 @@ addEventListener("DOMContentLoaded", (event) => {
     navBarPin.style.backgroundImage = "url(/images/SunPin.png)";
     navBarPin.style.backgroundSize = "cover";
     navBarPin.style.backgroundRepeat = "no-repeat";
-    navBarPin.addEventListener("click", (e) =>{
-        window.location.href = "pages/Shutter.html"
-    })
-
-
 
 // let sunMask = document.createElement("div");
 // sunMask.style.position = "fixed";
@@ -145,10 +140,7 @@ addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
-    let sectionLength = mainContainerBounds.width / 8;
-    let previousSection = 0;
-
-    function planetOrbit(DivElement, index) {
+    function planetOrbit(DivElement) {
         if ((parseFloat(DivElement.planet.style.marginLeft) - (window.innerWidth)) < Math.abs(megaMove)) {
             gsap.to(DivElement.planet, {y: 0, duration: 0.5, ease: "Power1.easeOut"});
         } else if ((parseFloat(DivElement.planet.style.marginLeft) + (window.innerWidth)) - parseFloat(DivElement.planet.style.height)) {
@@ -191,8 +183,8 @@ addEventListener("DOMContentLoaded", (event) => {
         gsap.to(navBarText, {
             x: -megaMove + (megaMove / ((-mainContainerBounds.width + window.innerWidth) / (parseFloat(navBar.style.width))))
         })
-        planetList.forEach((element, index) => {
-            planetOrbit(element, index)
+        planetList.forEach((element) => {
+            planetOrbit(element)
         })
     }
 

@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+    font-family: "Source Code Pro", serif;
+    /*overflow: hidden;*/
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.projects {
+    display: flex;
+    color: white;
+    background-color: inherit;
+}
+
+.projects > :nth-child(1){
+    background-color: #9cbbd8;
+}
+
+.projects > :nth-child(2){
+    background-color: #a4c25e;
+}
+.projects > :nth-child(3){
+    background-color: mediumpurple;
+}
+
+.projects > * {
+    height: 200px;
+    width: 200px;
+}
