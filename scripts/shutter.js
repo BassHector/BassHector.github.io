@@ -113,7 +113,6 @@ document.body.onload = () => {
             }
             gsap.set(`#${slidePanel.id}`, {perspective: 800})
             currentPanel++;
-            console.log(slidePanel.getBoundingClientRect())
         }
     })
     panning = setInterval(() => {
@@ -214,3 +213,5 @@ window.addEventListener('blur', function() {
 window.addEventListener('focus', function() {
     setupInterval(layer, 15000)
 });
+
+window.addEventListener("resize", () => {window.location.reload()})

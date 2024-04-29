@@ -1,3 +1,6 @@
+
+import {customFunctions} from "./customModules.js";
+
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,21 +54,6 @@ addEventListener("DOMContentLoaded", () => {
     navBarPin.style.backgroundImage = "url(/images/SunPin.png)";
     navBarPin.style.backgroundSize = "cover";
     navBarPin.style.backgroundRepeat = "no-repeat";
-
-// let sunMask = document.createElement("div");
-// sunMask.style.position = "fixed";
-// sunMask.style.width = `2%`;
-// sunMask.style.height = `100%`;
-// sunMask.style.top = '0';
-// sunMask.style.backgroundImage = `url(/images/SunMask.png)`;
-// sunMask.style.backgroundPosition = "center";
-// sunMask.style.backgroundSize = 'cover';
-// mainContainer.appendChild(sunMask)
-
-    function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-    }
-
 
     class planets {
         constructor(i) {
@@ -170,7 +158,7 @@ addEventListener("DOMContentLoaded", () => {
 
     function moveContainer(delta) {
         megaMove += delta;
-        megaMove = clamp(megaMove, -mainContainerBounds.width + window.innerWidth, 0);
+        megaMove = customFunctions.clamp(megaMove, -mainContainerBounds.width + window.innerWidth, 0);
         gsap.to(".MainContainer", {
             x: megaMove
         })
@@ -218,6 +206,8 @@ addEventListener("DOMContentLoaded", () => {
 
     })
 })
+
+window.addEventListener("resize", () => {window.location.reload()})
 
 
 
