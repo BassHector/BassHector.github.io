@@ -1,10 +1,7 @@
-
-import {customFunctions} from "./customModules.js";
-
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollTrigger);
 
-addEventListener("DOMContentLoaded", () => {
+addEventListener("DOMContentLoaded", (event) => {
 
 
     const mainContainer = document.getElementById("mainContainer");
@@ -54,6 +51,26 @@ addEventListener("DOMContentLoaded", () => {
     navBarPin.style.backgroundImage = "url(/images/SunPin.png)";
     navBarPin.style.backgroundSize = "cover";
     navBarPin.style.backgroundRepeat = "no-repeat";
+    navBarPin.addEventListener("click", (e) =>{
+        window.location.href = "pages/Shutter.html"
+    })
+
+
+
+// let sunMask = document.createElement("div");
+// sunMask.style.position = "fixed";
+// sunMask.style.width = `2%`;
+// sunMask.style.height = `100%`;
+// sunMask.style.top = '0';
+// sunMask.style.backgroundImage = `url(/images/SunMask.png)`;
+// sunMask.style.backgroundPosition = "center";
+// sunMask.style.backgroundSize = 'cover';
+// mainContainer.appendChild(sunMask)
+
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
 
     class planets {
         constructor(i) {
@@ -128,7 +145,10 @@ addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function planetOrbit(DivElement) {
+    let sectionLength = mainContainerBounds.width / 8;
+    let previousSection = 0;
+
+    function planetOrbit(DivElement, index) {
         if ((parseFloat(DivElement.planet.style.marginLeft) - (window.innerWidth)) < Math.abs(megaMove)) {
             gsap.to(DivElement.planet, {y: 0, duration: 0.5, ease: "Power1.easeOut"});
         } else if ((parseFloat(DivElement.planet.style.marginLeft) + (window.innerWidth)) - parseFloat(DivElement.planet.style.height)) {
@@ -158,7 +178,7 @@ addEventListener("DOMContentLoaded", () => {
 
     function moveContainer(delta) {
         megaMove += delta;
-        megaMove = customFunctions.clamp(megaMove, -mainContainerBounds.width + window.innerWidth, 0);
+        megaMove = clamp(megaMove, -mainContainerBounds.width + window.innerWidth, 0);
         gsap.to(".MainContainer", {
             x: megaMove
         })
@@ -171,8 +191,8 @@ addEventListener("DOMContentLoaded", () => {
         gsap.to(navBarText, {
             x: -megaMove + (megaMove / ((-mainContainerBounds.width + window.innerWidth) / (parseFloat(navBar.style.width))))
         })
-        planetList.forEach((element) => {
-            planetOrbit(element)
+        planetList.forEach((element, index) => {
+            planetOrbit(element, index)
         })
     }
 
@@ -206,8 +226,6 @@ addEventListener("DOMContentLoaded", () => {
 
     })
 })
-
-window.addEventListener("resize", () => {window.location.reload()})
 
 
 
