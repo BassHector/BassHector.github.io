@@ -12,8 +12,8 @@ const textArray = [
     "Praesent semper enim eget pretium /n sagittis. Maecenas lectus risus /n egestas quis, facilisis vel/n efficitur sit amet erat./n Quisque vel lacus.",
     "Morbi suscipit tortor justo, /n sed consequat nisi imperdiet at. /n Integer turpis sapien, ullamcorper id /n purus quis, imperdiet ornare orci. Nunc."
 ];
-
-
+let gigaRowArray = []
+let gigaRowArrayWhite = []
 function amountOfTextLines(arrayOfSentences) {
     let totalTextLines = 0;
     arrayOfSentences.forEach(text => {
@@ -116,13 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // let fifthParagraph = createMaskWithLayerText(draw, firstText,tenPercentWidth ,spacingBetweenText + previousTextElementBottom,  true)
 
 
-    let mouseTextBackground = draw.circle(600).attr({fill: "#FFFFFF"});
+    // let mouseTextBackground = draw.circle(600).attr({fill: "#FFFFFF"});
+    // let maskRect2 = draw.circle(600).fill('black');
+    // .add(maskRect2)
+    // mouseTextBackground.maskWith(mask);
 
     let fullRect = draw.rect(mainContainerBounds.width, mainContainerBounds.height).fill('white');
     // let maskRect = draw.rect().attr({height: maskHeight, width: maskWidth, x: 0, y: 0, fill: "black"});
 
-    let maskRect2 = draw.circle(600).fill('black');
-    let mask = draw.mask().add(fullRect).add(maskRect2)
+
+    let mask = draw.mask().add(fullRect)
 
 
 
@@ -150,6 +153,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 previousRowBottom += heightOfRow
                 mask.add(maskRow);
                 maskWhite.maskWith(mask);
+                gigaRowArray.push(maskRow);
+                gigaRowArrayWhite.push(maskWhite);
             } else {
                 let maskWhite = draw.rect().attr({
                     height: heightOfRow,
@@ -170,6 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 previousRowBottom += heightOfRow
                 mask.add(maskRow);
                 maskWhite.maskWith(mask);
+                gigaRowArray.push(maskRow);
+                gigaRowArrayWhite.push(maskWhite);
             }
         }
     }
@@ -191,14 +198,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rect.maskWith(mask);
 
-    mouseTextBackground.maskWith(mask);
+
 
 
 
     let moveAmount = 0;
     function someFunction(deltaY){
         moveAmount += deltaY
-        // moveAmount = customFunctions.clamp(moveAmount,0, window.innerWidth - maskWidth)
+        moveAmount = customFunctions.clamp(moveAmount,0, mainContainerBounds.height - window.innerHeight)
+        // console.log(window.innerHeight)
+        let thebottomofscreen = Math.ceil((moveAmount / totalTextLines) + (window.innerHeight / totalTextLines))
+        thebottomofscreen = customFunctions.clamp(moveAmount,0, totalTextLines)
+        console.log(Math.ceil(thebottomofscreen))
+        for(let i = 0; i < Math.ceil(thebottomofscreen) - 4; i++){
+            gsap.to(gigaRowArray[i], {
+                x: 50
+            })
+            gsap.to(gigaRowArrayWhite[i],{
+                x: 50
+                })
+
+        }
         // maskRect.animate({duration: 10, when: 'after'}).ease('<>').move(moveAmount, 0)
         // textBackground.animate({duration: 10, when: 'after'}).ease('<>').move(moveAmount, 0)
 
@@ -216,11 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
             someFunction(self.deltaY)
         }
     })
-
-    document.addEventListener("mousemove", (mouse) => {
-        maskRect2.move(mouse.offsetX - 300, mouse.offsetY - 300)
-        mouseTextBackground.move(mouse.offsetX - 300, mouse.offsetY - 300)
-    })
+    console.log(gigaRowArray)
 
 })
 
