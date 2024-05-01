@@ -1,4 +1,5 @@
 import {customFunctions} from "./customModules.js";
+gsap.registerPlugin(ScrollTrigger);
 
 const mainContainer = document.getElementById('mainContainer');
 let mainContainerBounds = mainContainer.getBoundingClientRect();
@@ -182,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     arrayAmountOfTextLinesInParagraph.forEach((lineAmount, arrayIndex) => {
-        weNeedSomeRows(lineAmount, lineHeight, 100, arrayIndex)
+        weNeedSomeRows(lineAmount, lineHeight, tenPercentWidth, arrayIndex)
     })
 
 
@@ -198,29 +199,112 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rect.maskWith(mask);
 
+    let textContainers = document.querySelectorAll("g")
+    let textContainersBounds = [];
+    textContainers.forEach(target => {
+        textContainersBounds.push(target.getBoundingClientRect())
+    })
 
 
 
 
     let moveAmount = 0;
+    let weAt = 0;
+    let pushTo = 0;
     function someFunction(deltaY){
         moveAmount += deltaY
-        moveAmount = customFunctions.clamp(moveAmount,0, mainContainerBounds.height - window.innerHeight)
-        // console.log(window.innerHeight)
-        let thebottomofscreen = Math.ceil((moveAmount / totalTextLines) + (window.innerHeight / totalTextLines))
-        thebottomofscreen = customFunctions.clamp(moveAmount,0, totalTextLines)
-        console.log(Math.ceil(thebottomofscreen))
-        for(let i = 0; i < Math.ceil(thebottomofscreen) - 4; i++){
-            gsap.to(gigaRowArray[i], {
-                x: 50
-            })
-            gsap.to(gigaRowArrayWhite[i],{
-                x: 50
-                })
+        moveAmount = customFunctions.clamp(moveAmount,0, mainContainerBounds.height)
+        let percentageRelative = customFunctions.relativePercentage(moveAmount + window.innerHeight, mainContainerBounds.height, 5)
+        percentageRelative = customFunctions.clamp(percentageRelative,1, arrayAmountOfTextLinesInParagraph.length)
+
+
+        let amountToMove = 0;
+
+
+        for(let i = 0; i < percentageRelative; i++) {
+            amountToMove += arrayAmountOfTextLinesInParagraph[i]
+            if(weAt < amountToMove){
+                if(i % 2 === 0) {
+                    for (let j = weAt; j < amountToMove; j++) {
+                        gsap.to(gigaRowArray[j], {
+                            x: 50
+                        })
+                        gsap.to(gigaRowArrayWhite[j], {
+                            x: 50
+                        })
+                    }
+                } else {
+                    for (let j = weAt; j < amountToMove; j++) {
+                        gsap.to(gigaRowArray[j], {
+                            x: -50
+                        })
+                        gsap.to(gigaRowArrayWhite[j], {
+                            x: -50
+                        })
+                    }
+                }
+                weAt = amountToMove
+            }
+            /// weAt is set after the move is made, as of now pushTo is going to used as var to push the blocks back. below is the code im working on
+            if(amountToMove < amountToMove){
+                console.log("hit")
+                for(let j = pushTo; j < amountToMove; j++) {
+                    if (i % 2 === 0) {
+                        for (let j = pushTo; j < amountToMove; j++) {
+                            gsap.to(gigaRowArray[j], {
+                                x: -50
+                            })
+                            gsap.to(gigaRowArrayWhite[j], {
+                                x: -50
+                            })
+                        }
+                    } else {
+                        for (let j = pushTo; j < amountToMove; j++) {
+                            gsap.to(gigaRowArray[j], {
+                                x: 500
+                            })
+                            gsap.to(gigaRowArrayWhite[j], {
+                                x: 500
+                            })
+                        }
+                    }
+                }
+                weAt = amountToMove
+                pushTo -= arrayAmountOfTextLinesInParagraph[i]
+            }
 
         }
-        // maskRect.animate({duration: 10, when: 'after'}).ease('<>').move(moveAmount, 0)
-        // textBackground.animate({duration: 10, when: 'after'}).ease('<>').move(moveAmount, 0)
+
+        console.log("we",weAt)
+        console.log("amountto",amountToMove)
+        console.log(pushTo)
+
+
+
+        // if(weAt < amountToMove){
+        //
+        //     for(let i = 0; i < amountToMove; i++) {
+        //         gsap.to(gigaRowArray[i], {
+        //             x: 50
+        //         })
+        //         gsap.to(gigaRowArrayWhite[i], {
+        //             x: 50
+        //         })
+        //     }
+        //     weAt = amountToMove
+        // }
+
+
+        // for(let i = 0; i < percentageRelative + bottomActivate - 5; i++){
+        //     if (i < totalTextLines) {
+        //         gsap.to(gigaRowArray[i], {
+        //             x: 50
+        //         })
+        //         gsap.to(gigaRowArrayWhite[i], {
+        //             x: 50
+        //         })
+        //     }
+        // }
 
     }
 
@@ -236,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
             someFunction(self.deltaY)
         }
     })
-    console.log(gigaRowArray)
+
 
 })
 
