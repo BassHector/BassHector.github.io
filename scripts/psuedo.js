@@ -27,6 +27,7 @@ function amountOfTextLines(arrayOfSentences) {
 
 let arrayAmountOfTextLinesInParagraph = [];
 const totalTextLines = amountOfTextLines(textArray)
+let catlParagraph = customFunctions.cumulativeIntArray(arrayAmountOfTextLinesInParagraph);
 
 let spacingBetweenText;
 let newFontSize;
@@ -61,7 +62,7 @@ function updateRootFontSize() {
 
     lineHeight = newFontSize * 1.2;
     // add the height of all the lines, then subtract from height of container then divide up the free space between all of paragraphs
-    spacingBetweenText =  ((mainContainerBounds.height - ((newFontSize) * totalTextLines)) / (textArray.length + 1)); ;
+    spacingBetweenText =  ((mainContainerBounds.height - ((newFontSize) * totalTextLines)) / (textArray.length + 1));
 
     if (spacingBetweenText < 0) {
         mainContainer.style.height = `${mainContainerBounds.height + (Math.abs(spacingBetweenText * textArray.length))}px`;
@@ -128,8 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let mask = draw.mask().add(fullRect)
 
+    console.log(spacingBetweenText)
 
-
+    const maskCutvariable = 50;
     let previousRowBottom = 0;
     function weNeedSomeRows (amountOfRows, heightOfRow, baseOfWidthOfRow, arrayIndex) {
 
@@ -137,19 +139,21 @@ document.addEventListener("DOMContentLoaded", () => {
             if(arrayIndex % 2 === 0) {
                 let maskWhite = draw.rect().attr({
                     height: heightOfRow,
-                    width: baseOfWidthOfRow * (i + 1),
-                    x: 0,
-                    y: heightOfRow + previousRowBottom + (spacingBetweenText * arrayIndex),
+                    width: baseOfWidthOfRow + (i * maskCutvariable),
+                    x: -(baseOfWidthOfRow + (i * maskCutvariable)),
+                    y: previousRowBottom + (spacingBetweenText * (arrayIndex + 1)),
                     fill: "#FFFFFF",
-                    id: `whiteRow${i}`
+                    id: `whiteRow${i}`,
+                    ogXpos: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1))
                 });
                 let maskRow = draw.rect().attr({
                     height: heightOfRow,
-                    width: baseOfWidthOfRow * (i + 1),
-                    x: 0,
-                    y: heightOfRow + previousRowBottom + (spacingBetweenText * arrayIndex),
+                    width: baseOfWidthOfRow + (i * maskCutvariable),
+                    x: -(baseOfWidthOfRow + (i * maskCutvariable)),
+                    y: previousRowBottom + (spacingBetweenText * (arrayIndex + 1)),
                     fill: "black",
-                    id: `blackRow${i}`
+                    id: `blackRow${i}`,
+                    ogXpos: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1))
                 });
                 previousRowBottom += heightOfRow
                 mask.add(maskRow);
@@ -159,19 +163,21 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 let maskWhite = draw.rect().attr({
                     height: heightOfRow,
-                    width: baseOfWidthOfRow * (i + 1),
-                    x: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1)),
-                    y: heightOfRow + previousRowBottom + (spacingBetweenText * arrayIndex),
+                    width: baseOfWidthOfRow + (i * maskCutvariable),
+                    x: mainContainerBounds.width,
+                    y: previousRowBottom + (spacingBetweenText * (arrayIndex + 1)),
                     fill: "#FFFFFF",
-                    id: `whiteRow${i}`
+                    id: `whiteRow${i}`,
+                    ogXpos: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1))
                 });
                 let maskRow = draw.rect().attr({
                     height: heightOfRow,
-                    width: baseOfWidthOfRow * (i + 1),
-                    x: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1)),
-                    y: heightOfRow + previousRowBottom + (spacingBetweenText * arrayIndex),
+                    width: baseOfWidthOfRow + (i * maskCutvariable),
+                    x: mainContainerBounds.width,
+                    y: previousRowBottom + (spacingBetweenText * (arrayIndex + 1)),
                     fill: "black",
-                    id: `blackRow${i}`
+                    id: `blackRow${i}`,
+                    ogXpos: mainContainerBounds.width - (baseOfWidthOfRow * (i + 1))
                 });
                 previousRowBottom += heightOfRow
                 mask.add(maskRow);
@@ -181,10 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+    // y: previousRowBottom + (spacingBetweenText + heightOfRow) * (lineHeight * arrayIndex)
+    // y: heightOfRow + previousRowBottom + (spacingBetweenText * arrayIndex),
 
     arrayAmountOfTextLinesInParagraph.forEach((lineAmount, arrayIndex) => {
-        weNeedSomeRows(lineAmount, lineHeight, tenPercentWidth, arrayIndex)
+        weNeedSomeRows(lineAmount, lineHeight, mainContainerBounds.width * .7, arrayIndex)
     })
+    console.log(window.innerWidth)
+
 
 
 
@@ -214,70 +224,126 @@ document.addEventListener("DOMContentLoaded", () => {
     function someFunction(deltaY){
         moveAmount += deltaY
         moveAmount = customFunctions.clamp(moveAmount,0, mainContainerBounds.height)
-        let percentageRelative = customFunctions.relativePercentage(moveAmount + window.innerHeight, mainContainerBounds.height, 5)
-        percentageRelative = customFunctions.clamp(percentageRelative,1, arrayAmountOfTextLinesInParagraph.length)
+        let percentageRelative = customFunctions.relativePercentage(moveAmount + window.innerHeight, mainContainerBounds.height, arrayAmountOfTextLinesInParagraph.length + 1)
+        let botOfVP = customFunctions.relativePercentage(moveAmount + window.innerHeight, mainContainerBounds.height, totalTextLines)
+        let otherPR = customFunctions.relativePercentage(moveAmount, mainContainerBounds.height, totalTextLines)
+        // percentageRelative = customFunctions.clamp(percentageRelative,1, arrayAmountOfTextLinesInParagraph.length)
+        let nonActiveContainers = customFunctions.rangeOutside(0, customFunctions.clamp(otherPR,0,totalTextLines/2), botOfVP, totalTextLines - 1)
 
-
+        let activeContainers = customFunctions.rangeBetween(customFunctions.clamp(otherPR,0,totalTextLines/2), customFunctions.clamp(botOfVP, 0, totalTextLines));
         let amountToMove = 0;
 
 
-        for(let i = 0; i < percentageRelative; i++) {
-            amountToMove += arrayAmountOfTextLinesInParagraph[i]
-            if(weAt < amountToMove){
-                if(i % 2 === 0) {
-                    for (let j = weAt; j < amountToMove; j++) {
-                        gsap.to(gigaRowArray[j], {
-                            x: 50
-                        })
-                        gsap.to(gigaRowArrayWhite[j], {
-                            x: 50
-                        })
-                    }
-                } else {
-                    for (let j = weAt; j < amountToMove; j++) {
-                        gsap.to(gigaRowArray[j], {
-                            x: -50
-                        })
-                        gsap.to(gigaRowArrayWhite[j], {
-                            x: -50
-                        })
-                    }
-                }
-                weAt = amountToMove
+        for(let i = activeContainers[0]; i < activeContainers[activeContainers.length - 1]; i++){
+            if (i < catlParagraph[0] || (i >= catlParagraph[1] && i < catlParagraph[2]) || (i >= catlParagraph[3] && i < catlParagraph[4])) {
+                gsap.to(gigaRowArray[i], {
+                    x: 0
+                })
+                gsap.to(gigaRowArrayWhite[i], {
+                    x: 0
+                })
+            } else {
+                gsap.to(gigaRowArray[i], {
+                    x: mainContainerBounds.width - gigaRowArray[i].node.attributes[0].value
+                })
+                // console.log(gigaRowArray[i].node.attributes[0].value)
+                gsap.to(gigaRowArrayWhite[i], {
+                    x: mainContainerBounds.width - gigaRowArray[i].node.attributes[0].value
+                })
             }
-            /// weAt is set after the move is made, as of now pushTo is going to used as var to push the blocks back. below is the code im working on
-            if(amountToMove < amountToMove){
-                console.log("hit")
-                for(let j = pushTo; j < amountToMove; j++) {
-                    if (i % 2 === 0) {
-                        for (let j = pushTo; j < amountToMove; j++) {
-                            gsap.to(gigaRowArray[j], {
-                                x: -50
-                            })
-                            gsap.to(gigaRowArrayWhite[j], {
-                                x: -50
-                            })
-                        }
-                    } else {
-                        for (let j = pushTo; j < amountToMove; j++) {
-                            gsap.to(gigaRowArray[j], {
-                                x: 500
-                            })
-                            gsap.to(gigaRowArrayWhite[j], {
-                                x: 500
-                            })
-                        }
-                    }
-                }
-                weAt = amountToMove
-                pushTo -= arrayAmountOfTextLinesInParagraph[i]
-            }
-
         }
 
-        console.log("we",weAt)
-        console.log("amountto",amountToMove)
-        console.log(pushTo)
+        //WE GOTTA USE THIS TO RETURN ALL NONACTIVE CONTAINERS TO THEIR ORIGINAL POSITIONS
+        nonActiveContainers.forEach((number) => {
+
+            gsap.to(gigaRowArray[number], {
+                x: mainContainerBounds.width
+            })
+            gsap.to(gigaRowArrayWhite[number], {
+                x: mainContainerBounds.width
+            })
+
+        })
+        // console.log(nonActiveContainers)
+
+
+
+        // for (let j = weAt; j < amountToMove; j++) {
+            //                 gsap.to(gigaRowArray[j], {
+            //                     x: 50
+            //                 })
+            //                 gsap.to(gigaRowArrayWhite[j], {
+            //                     x: 50
+            //                 })
+            //             }
+            //         } else {
+            //             for (let j = weAt; j < amountToMove; j++) {
+            //                 gsap.to(gigaRowArray[j], {
+            //                     x: -50
+            //                 })
+            //                 gsap.to(gigaRowArrayWhite[j], {
+            //                     x: -50
+            //                 })
+            //             }
+
+
+
+
+        // for(let i = 0; i < percentageRelative; i++) {
+        //     amountToMove += arrayAmountOfTextLinesInParagraph[i]
+        //     if (weAt < amountToMove) {
+        //         if (i % 2 === 0) {
+        //             for (let j = weAt; j < amountToMove; j++) {
+        //                 gsap.to(gigaRowArray[j], {
+        //                     x: 50
+        //                 })
+        //                 gsap.to(gigaRowArrayWhite[j], {
+        //                     x: 50
+        //                 })
+        //             }
+        //         } else {
+        //             for (let j = weAt; j < amountToMove; j++) {
+        //                 gsap.to(gigaRowArray[j], {
+        //                     x: -50
+        //                 })
+        //                 gsap.to(gigaRowArrayWhite[j], {
+        //                     x: -50
+        //                 })
+        //             }
+        //         }
+        //         weAt = amountToMove
+        //     }
+        //     // weAt is set after the move is made, as of now pushTo is going to used as var to push the blocks back. below is the code im working on
+        //     if (otherPR > 5) {
+        //         if (i % 2 === 0) {
+        //             for (let j = otherPR; j > 0; j--) {
+        //                 gsap.to(gigaRowArray[j], {
+        //                     x: -50
+        //                 })
+        //                 gsap.to(gigaRowArrayWhite[j], {
+        //                     x: -50
+        //                 })
+        //             }
+        //         } else {
+        //             for (let j = otherPR; j > 0; j--) {
+        //                 gsap.to(gigaRowArray[j], {
+        //                     x: 500
+        //                 })
+        //                 gsap.to(gigaRowArrayWhite[j], {
+        //                     x: 500
+        //                 })
+        //             }
+        //         }
+        //     }
+        //     weAt = amountToMove
+        //     pushTo -= arrayAmountOfTextLinesInParagraph[i]
+        //
+        // }
+
+
+        // console.log("we",weAt)
+        // console.log("amountto",amountToMove)
+
 
 
 
