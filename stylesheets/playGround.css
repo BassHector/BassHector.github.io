@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+    font-family: "Source Code Pro", serif;
+    overflow-x: hidden;
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+#mainContainer{
+    position: relative;
+}
+
+#someDiv {
+    height: 200px;
+    width: 200px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #9cbbd8;
+}
