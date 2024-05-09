@@ -13,7 +13,7 @@
     box-sizing: border-box;
     font-family: "JetBrains Mono", serif;
     text-shadow: -1px 2px 6px rgba(0,0,0,0.6);
-    /*overflow: hidden;*/
+    overflow: hidden;
 }
 
 
@@ -23,19 +23,7 @@ body,html {
     background-color: white;
 }
 
-
 #mainContainer{
-    position: relative;
-    height: 100vh;
-    width: 100vw;
-}
-
-#hid{
-    position: absolute;
-    left: 100vw;
-}
-
-#mainContainerHid{
     background-color: #ff6b32;;
     position: relative;
     height: 100vh;
@@ -134,16 +122,4 @@ body,html {
     .button{
         font-size: 4vw;
     }
-}
-
-.layer1{
-    background-color: #ff6b32;
-}
-
-.layer2{
-    background-color: mediumvioletred;
-}
-
-.layer3{
-    background-color: maroon;
 }
