@@ -14,7 +14,7 @@ let mainContainerBounds = mainContainer.getBoundingClientRect();
 
 let boxMaxDim = Math.min(mainContainerBounds.width, mainContainerBounds.height);
 //must be a numbered squared
-const numberOfBox = 16;
+const numberOfBox = 64;
 
 
 const boxesSize = Math.ceil(boxMaxDim / Math.sqrt(numberOfBox));
@@ -93,6 +93,7 @@ function setLayer (layer){
             tile.id = `${layerNumber + currentTileId}`;
             tile.className = `layer${layer + 1}`
             tile.style.position = 'absolute';
+            tile.style.border = '1px solid black';
             tile.style.height = `${boxesSize}px`;
             tile.style.width = `${boxesSize}px`;
             tile.style.top = `${boxesSize * j}px`;
@@ -106,7 +107,7 @@ function setLayer (layer){
             mainContainer.appendChild(tile)
 
             tile.addEventListener("mouseover", () => {
-                gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic", onComplete: ()=> reverse(tile) })
+                gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic", overwrite: true,  onComplete: ()=> reverse(tile) })
                 lastHoveredTile = tile;
             })
 
