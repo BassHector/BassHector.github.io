@@ -48,6 +48,7 @@ export class customFunctions {
 
         return addToArray;
     }
+
     //more functions get added here
 
 }

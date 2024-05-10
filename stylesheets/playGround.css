@@ -13,7 +13,8 @@
     box-sizing: border-box;
     font-family: "JetBrains Mono", serif;
     text-shadow: -1px 2px 6px rgba(0,0,0,0.6);
-    /*overflow: hidden;*/
+    overflow: hidden;
+    perspective: 400px;
 }
 
 
@@ -31,12 +32,15 @@ body,html {
 }
 
 #hid{
+    z-index: 888;
     position: absolute;
-    left: 100vw;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
 
 #mainContainerHid{
-    background-color: #ff6b32;;
+
     position: relative;
     height: 100vh;
     width: 100vw;
@@ -56,6 +60,7 @@ body,html {
 }
 
 .Intro p{
+    color: white;
     font-weight: bold;
     text-align: center;
     font-size: 2vw;
@@ -77,25 +82,33 @@ body,html {
 }
 
 .NavBar{
+    padding-top: 5%;
     margin-top: 5%;
     display: flex;
     justify-content: space-around;
-    height: 50%;
+    height: 100%;
     width: 100%;
 }
 
 .button{
+    color: white;
     margin-right: 5%;
     margin-left: 5%;
     text-align: center;
     font-size: 2vw;
     line-height: var(--navHeightHalf);
+    pointer-events: all;
     width: 90%;
-    border: solid 5px black;
+    height: 50%;
+    border: solid 5px white;
     border-radius: 10px;
-    box-shadow: 2px 1px 25px 0px rgba(0,0,0,0.75);
-    -webkit-box-shadow: 2px 1px 25px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 2px 1px 25px 0px rgba(0,0,0,0.75);
+    transition: all 0.5s ease;
+
+}
+
+.button:hover{
+    background-color: #32C6FF;
+    box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);
 }
 
 .vignette {
