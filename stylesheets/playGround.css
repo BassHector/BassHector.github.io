@@ -26,7 +26,6 @@ body,html {
 
 
 #mainContainer{
-    position: relative;
     height: 100vh;
     width: 100vw;
 }
@@ -40,7 +39,6 @@ body,html {
 }
 
 #mainContainerHid{
-
     position: relative;
     height: 100vh;
     width: 100vw;
@@ -53,62 +51,72 @@ body,html {
 }
 
 .Intro {
-    color: black;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     margin-right: 5%;
     max-width: 50%;
+    max-height: 100%
 
 }
 
 .Intro p{
+    position: relative;
     color: white;
     font-weight: bold;
     text-align: center;
-    font-size: 2vw;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
 }
 
 #imgme {
     background-image: url(../images/styledME.png);
     background-repeat: no-repeat;
     background-size: contain;
+    background-position: center;
     width: 100%;
     height: 100%
 }
 
 .nav {
-    display: grid;
-    height: 20%;
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    flex-grow: 1;
+
 
 }
 
 .NavBar{
-    padding-top: 5%;
-    margin-top: 5%;
+    padding: 5%;
     display: flex;
+    flex-grow: 1;
     justify-content: space-around;
+    align-items: flex-end;
     height: 100%;
     width: 100%;
 }
 
 .button{
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
     margin-right: 5%;
     margin-left: 5%;
     text-align: center;
     font-size: 2vw;
-    line-height: var(--navHeightHalf);
     pointer-events: all;
-    width: 90%;
-    height: 50%;
+    width: 100%;
+    height: auto;
     border: solid 5px white;
     border-radius: 10px;
     transition: all 0.5s ease;
-
 }
 
 .button:hover{
     background-color: #32C6FF;
-    box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);
+    /*box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);*/
 }
 
 .vignette {
@@ -126,7 +134,9 @@ body,html {
         display: block;
     }
     .Intro {
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
         width: 100vw;
         margin-right: 0;
         max-width: 100%;
@@ -140,13 +150,111 @@ body,html {
     #imgme{
         height: 50%
     }
-    .nav {
-        position: absolute;
-        bottom: 0;
-    }
+
     .button{
+        line-height: var(--navHeightHalf);
         font-size: 4vw;
     }
+}
+
+
+#layer1{
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+#mainContainerLayer1{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+}
+
+#mainContainerLayer1 > strong{
+    font-size: Large;
+    padding-top: 10px;
+    color: white;
+    text-align: center;
+    justify-self: center;
+}
+
+.skillsContainer{
+    display: flex;
+    height: 100vh;
+}
+
+.skills{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+.skillsImages{
+    display: flex;
+    flex-direction: row;
+    height: 40%;
+
+}
+
+.skillsImages > *{
+    height: 100%;
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+#html{
+    background-image: url("../images/Logos/htmlLogo.png");
+}
+
+#css {
+    background-image: url("../images/Logos/cssLogo.png");
+}
+
+#javascript{
+    background-image: url("../images/Logos/jsLogo.png");
+}
+
+.skillsContainer{
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+    padding-top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.skillsDemos{
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    width: 100%;
+    border: solid 2px black;
+    border-radius: 10px;
+}
+.skillsDemos > *{
+    border: solid 2px black;
+    background-color: dimgray;
+    pointer-events: all;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.library{
+    border: 2px solid black;
+    height: 25%;
+    width: 100%;
 }
 
 .layer1{
@@ -154,7 +262,7 @@ body,html {
 }
 
 .layer2{
-    background-color: mediumvioletred;
+    background-color: #D232FF;
 }
 
 .layer3{
@@ -163,4 +271,19 @@ body,html {
 
 .layer4{
     background-color: #32C6FF;
+}
+
+.skillsGreen{
+    font-size: small;
+    color:greenyellow;
+}
+
+.skillsPlum{
+    font-size: small;
+    color: #ff0056;
+}
+
+.skillsGold{
+    font-size: small;
+    color: #ffc000;
 }
