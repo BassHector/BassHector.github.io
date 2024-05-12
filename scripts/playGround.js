@@ -17,17 +17,11 @@ let boxMaxDim = Math.min(mainContainerBounds.width, mainContainerBounds.height);
 //must be a numbered squared
 const numberOfBox = 64;
 
-
 const boxesSize = Math.ceil(boxMaxDim / Math.sqrt(numberOfBox));
 const boxesPerRow = Math.ceil(mainContainerBounds.width / boxesSize);
 const boxesPerColumn = Math.round(mainContainerBounds.height / boxesSize);
 const numberOfLayers = 3;
 const boxesPerLayer = (boxesPerRow * boxesPerColumn)
-
-const animateTurnTilesDelay = 10;
-const animationDuration = 0.2
-let isAnimatingFlag = false;
-let isAnimating = null; //timer reference for the transitions
 
 let animatedArray = []
 
@@ -35,73 +29,74 @@ let lastHoveredTile = null;
 let animationIncre = 0;
 let currentActiveElements = Array.from(layer0Content.querySelectorAll('*'))
 
+let transitionTimeline = gsap.timeline({duration: 0.5})
 
 function turnTiles(tile, layer, tileNumber) {
     lastHoveredTile = null;
-    if(tile && animatedArray.indexOf(tile) === -1){
+    if(tile){
         //vvvvvv literally couldn't pass the tile to gsap, so I had to put it in this variable first...for some reason
         let theCurrentTile = tile;
-
-        isAnimating = setTimeout(() => {
-            theCurrentTile.style.zIndex = `1`;
-            theCurrentTile.style.pointerEvents = "none";
-            isAnimatingFlag = false;
-            animatedArray = [];
-        }, 2000)
         switch(parseInt(tileNumber) % 2){
             case 0:
-                gsap.to(tile, {y: -window.innerWidth - boxesSize - 10, duration: animationDuration, ease:"power1.inOut"
-                })
-
+                transitionTimeline.to(tile, {y: -window.innerHeight - boxesSize - 10, onComplete: (() => {
+                            theCurrentTile.style.zIndex = `1`;
+                            theCurrentTile.style.pointerEvents = "none";
+                            animationIncre++
+                            console.log(layer)
+                            setZIndex(layer)
+                    })
+                }, "-=0.495")
                 break;
             case 1:
-                gsap.to(tile, {y: window.innerWidth + boxesSize + 10, duration: 0.5, ease:"power1.inOut",
-                })
+                transitionTimeline.to(tile, {y: window.innerHeight + boxesSize + 10, onComplete: (() => {
+                        theCurrentTile.style.zIndex = `1`;
+                        theCurrentTile.style.pointerEvents = "none";
+                        animationIncre++
+                        setZIndex(layer)
+                    })
+                }, "-=0.495")
                 break;
             default:
                 console.log("error")
         }
-        animationIncre++
+
         animatedArray.push(tile)
+        // console.log(animationIncre)
         let tilesToAnimate = [];
         tilesToAnimate.push(document.getElementById(`${tile.id - 1}`))
         tilesToAnimate.push(document.getElementById(`${parseInt(tile.id) + 1}`))
         tilesToAnimate.push(document.getElementById(`${tile.id - boxesPerColumn}`))
         tilesToAnimate.push(document.getElementById(`${parseInt(tile.id) + boxesPerColumn}`))
-        setTimeout(() => {
-            for(tile in tilesToAnimate){
-                turnTiles(tilesToAnimate[tile], layer,  tile);
-            }
 
-        }, animateTurnTilesDelay)
-        // console.log(animationIncre)
-        if (animationIncre === boxesPerLayer){
-            animationIncre = 0;//clear the array when you're finished
-            for(let i = 0; i < allBoxesLayer[layer].length; i++){
-                if(allBoxesLayer[layer][i].style.zIndex !== `${numberOfLayers - 1}`) { // if the layer you're going to is behind it, don't animate it
-                    gsap.to(allBoxesLayer[layer][i], {
-                        y: 0,
-                        stagger: {
-                            each: 0.05,
-                            from: 'end',
-                            grid: 'auto',
-                            ease: 'power2.inOut',
-                        }
-                    })
-                }
-                allBoxesLayer[layer][i].style.zIndex = `${numberOfLayers}`
-                setTimeout(() => {
-                    allBoxesLayer[layer][i].style.pointerEvents = ""
-                }, 50 * i)
+        tilesToAnimate.forEach((superTile) => {
+            if (animatedArray.indexOf(superTile) === -1) {
+                turnTiles(superTile, layer, animationIncre);
+            }
+        })
 
-            }
-            for(let i = 0; i < currentActiveElements.length; i++){
-                currentActiveLayer.div.style.zIndex = `${numberOfLayers + 1}`
-                currentActiveLayer.div.style.pointerEvents = `none`
-            }
+
+
+    }
+}
+
+function setZIndex(layer) {
+    if (animationIncre === boxesPerLayer){
+        console.log("hit")
+        animatedArray = [];
+        for(let i = 0; i < allBoxesLayer[layer].length; i++){
+            transitionTimeline.to(allBoxesLayer[layer][i], {y: 0 }, "-=0.495")
+            ///////SNAJKDLJIFASBLJKFBLJKSBFALJKBFLJKFBSJLK I STOPPED HERE!!!
+            allBoxesLayer[layer][i].style.zIndex = `${numberOfLayers}`
+
+            setTimeout(() => {
+                allBoxesLayer[layer][i].style.pointerEvents = ""
+            }, 50 * i)
 
         }
-
+        for(let i = 0; i < currentActiveElements.length; i++){
+            currentActiveLayer.div.style.zIndex = `${numberOfLayers + 1}`
+            currentActiveLayer.div.style.pointerEvents = `none`
+        }
     }
 }
 
@@ -124,12 +119,11 @@ function setLayer (layer){
             if(parseInt(tile.style.zIndex) !== numberOfLayers){
                 tile.style.pointerEvents = "none";
             }
-            tile.style.transition = 'all 0.1s ease';
             tile.setAttribute("name", "tile")
             mainContainer.appendChild(tile)
 
             tile.addEventListener("mouseover", () => {
-                gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic", overwrite: true,  onComplete: ()=> reverse(tile) })
+                gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic",  onComplete: ()=> reverse(tile) })
                 lastHoveredTile = tile;
             })
 
@@ -201,17 +195,14 @@ document.addEventListener('mousemove', function(e) {
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
-        console.log(isAnimatingFlag)
-        if (isAnimatingFlag === false && animationIncre === 0) {
-            isAnimatingFlag = true;
+        animationIncre = 0;
             if (button.innerText === "Skills") {
                 if(lastHoveredTile === null){
-                    lastHoveredTile = allBoxesLayer[1][Math.round(allBoxesLayer[1].length / 2) ]
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[1].length / 2) ]
                 }
                 animationIncre = 0;
                 currentActiveLayer = {int: 1, div: layer1Content};
-                moveElements(currentActiveLayer)
-                turnTiles(lastHoveredTile, 1, 0)
+                moveElements(currentActiveLayer, lastHoveredTile, 1, 0)
                 playSkillsAnimations()
             }
             if (button.innerText === "Projects") {
@@ -227,31 +218,28 @@ buttons.forEach((button) => {
             }
             if (button.innerText === "Home") {
                 if(lastHoveredTile === null){
-                    lastHoveredTile = allBoxesLayer[0][Math.round(allBoxesLayer[0].length / 2) ]
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[0].length / 2) ]
+                    console.log(lastHoveredTile)
                 }
                 animationIncre = 0;
                 currentActiveLayer = {int: 0, div: layer0Content};
-                moveElements(currentActiveLayer)
-                turnTiles(lastHoveredTile, 0, 0)
+                moveElements(currentActiveLayer, lastHoveredTile, 0, 0)
 
             }
-        }
+
     });
 });
 //takes in current active layer objects vvvvv
-let transitionTimeline = gsap.timeline({duration: 2, stagger: {
-        each: 0.03,
-        from: 'center',
-        grid: 'auto',
-        ease: 'power2.inOut',
-    }})
-function moveElements(currentActiveLayersObj) {
-    transitionTimeline.to(currentActiveElements, {x: window.innerWidth});
+
+function moveElements(currentActiveLayersObj, lastHoveredTile, layer, tileId) {
+    currentActiveElements.forEach((element) => {
+        transitionTimeline.to(element, {x: window.innerWidth}, "-=0.495");
+    })
     //converting to object
     currentActiveElements = Array.from(currentActiveLayersObj.div.querySelectorAll('*'))
     //push the new layer objects in
     transitionTimeline.to(currentActiveElements, {x: 0});
-
+    turnTiles(lastHoveredTile, layer, tileId)
 }
 
 let currentActiveLayer = {};
