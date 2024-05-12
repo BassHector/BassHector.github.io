@@ -312,15 +312,15 @@ strong {
 }
 
 .layer2{
-    background-color: #D232FF;
+    background-color: #FF1178;
 }
 
 .layer3{
-    background-color: maroon;
+    background-color: #32C6FF;
 }
 
 .layer4{
-    background-color: #32C6FF;
+    background-color: #FE0000;
 }
 
 .skillsGreen{
@@ -330,7 +330,7 @@ strong {
 
 .skillsPlum{
     font-size: small;
-    color: #ff0056;
+    color: #d189fa;
 }
 
 .skillsGold{

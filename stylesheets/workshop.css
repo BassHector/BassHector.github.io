@@ -31,7 +31,7 @@ body,html {
 #mainContainer{
     display: flex;
     flex-direction: column;
-    background-color: #D232FF;
+    background-color: #32C6FF;
     position: relative;
     height: 100vh;
     width: 100vw;
@@ -39,93 +39,29 @@ body,html {
     text-align: center;
 }
 
-.skillsContainer{
-    display: flex;
-    height: 100vh;
-}
-
-.skills{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-}
-
-.skillsImages{
-    display: flex;
-    flex-direction: row;
-    height: 40%;
-
-}
-
-.skillsImages > *{
-    height: 100%;
-    width: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#html{
-    background-image: url("../images/Logos/htmlLogo.png");
-}
-
-#css {
-    background-image: url("../images/Logos/cssLogo.png");
-}
-
-#javascript{
-    background-image: url("../images/Logos/jsLogo.png");
-}
-
-.skillsContainer{
-    display: flex;
-    flex-direction: column;
-    padding: 5%;
-    padding-top: 0;
-    height: 100%;
-    width: 100%;
-}
-
-.skillsDemos{
-    display: flex;
-    flex-direction: row;
-    height: 50%;
-    width: 100%;
-    border: solid 2px black;
-    border-radius: 10px;
-}
-.skillsDemos > *{
-    border: solid 2px black;
-    background-color: dimgray;
-    height: 100%;
-    width: 100%;
-}
-
-.library{
-    border: 2px solid black;
-    height: 25%;
-    width: 100%;
-}
-
 .nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    margin-top: auto;
+    margin-bottom: 1%;
 
 }
 
 .NavBar{
-    padding: 5%;
+    overflow: visible;
+    padding-top: 5%;
     display: flex;
     flex-grow: 1;
+    margin-bottom: 2%;
     justify-content: space-around;
     align-items: flex-end;
     height: 100%;
     width: 100%;
 }
 
-.button{
-    overflow: visible;
+.button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,8 +76,83 @@ body,html {
     border: solid 5px white;
     border-radius: 10px;
     transition: all 0.5s ease;
+    cursor: pointer;
+    box-shadow: 2px 1px 20px 0px rgba(0,0,0,0.8);
 }
 
+.button:hover{
+    background-color: #32C6FF;
+    /*box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);*/
+}
+
+.projectsContainer{
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    text-align: center;
+}
+
+.projectsContainer > h1{
+    overflow: visible;
+    text-align: center;
+    font-size: 1.5rem;
+    /*word-spacing: -5px;*/
+}
+
+.projects {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: solid 1px black;
+}
+
+.projectsHolder {
+    display: flex;
+    flex-direction: column;
+    height: 200%;
+    width: 100%;
+
+}
+
+.projectsHolder > * {
+    background-size: 200%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 3%;
+
+    width: auto;
+    max-width: 94%;
+}
+
+.projectDemo{
+    border: solid 1px dimgray;
+    padding: 1%;
+    height: 100%;
+    background-color: #ebe36b;
+    gap: 1%;
+}
+
+#PDemo0{
+    background-image: url("../images/Previews/matterJSPreview.png");
+    transition: all ease;
+    animation: moveBackGround 20s ease-in-out infinite;
+}
+
+
+@keyframes moveBackGround {
+    0%, 100% {
+        background-position: 100% 0%;
+    }
+    25% {
+        background-position: 0% 100%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+}
 
 @media (max-width: 480px) {
 
