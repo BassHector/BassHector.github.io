@@ -7,6 +7,13 @@
 @font-face {
     font-family: "JetBrains Mono";
     src: url("../fonts/JetBrainsMono/JetBrainsMono-Regular.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono/JetBrainsMono-Bold.ttf");
+    font-weight: bold;
 }
 
 * {
@@ -24,6 +31,9 @@ body,html {
     background-color: white;
 }
 
+strong {
+    font-weight: bold !important;
+}
 
 #mainContainer{
     height: 100vh;
@@ -82,14 +92,17 @@ body,html {
     flex-direction: column;
     width: 100%;
     flex-grow: 1;
+    margin-top: auto;
 
 
 }
 
 .NavBar{
-    padding: 5%;
+    overflow: visible;
+    padding-top: 5%;
     display: flex;
     flex-grow: 1;
+    margin-bottom: 2%;
     justify-content: space-around;
     align-items: flex-end;
     height: 100%;
@@ -97,7 +110,7 @@ body,html {
 }
 
 .button{
-    overflow: visible;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,6 +126,7 @@ body,html {
     border-radius: 10px;
     transition: all 0.5s ease;
     cursor: pointer;
+    box-shadow: 2px 1px 20px 0px rgba(0,0,0,0.8);
 }
 
 .button:hover{
@@ -169,6 +183,8 @@ body,html {
 }
 
 #mainContainerLayer1{
+    text-align: center;
+    color: white;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -177,7 +193,7 @@ body,html {
 }
 
 #mainContainerLayer1 > strong{
-    font-size: Large;
+    font-size: x-large;
     padding-top: 10px;
     color: white;
     text-align: center;
@@ -190,9 +206,6 @@ body,html {
 }
 
 .skills{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -201,7 +214,7 @@ body,html {
 .skillsImages{
     display: flex;
     flex-direction: row;
-    height: 40%;
+    height: 20%;
 
 }
 
@@ -227,12 +240,19 @@ body,html {
 }
 
 .skillsContainer{
+    overflow: auto;
+    color: white;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    padding: 5%;
-    padding-top: 0;
+    padding-left: 5%;
+    padding-right: 5%;
     height: 100%;
     width: 100%;
+}
+.skillsContainer p{
+    margin: 0;
+    padding: 2%;
 }
 
 .skillsDemos{
@@ -243,9 +263,11 @@ body,html {
     border: solid 2px black;
     border-radius: 10px;
 }
+
 .skillsDemos > *{
+    text-align: left;
     border: solid 2px black;
-    background-color: dimgray;
+    background-color: rgba(52,61,70, 0.5);
     pointer-events: all;
     overflow: auto;
     height: 100%;
@@ -253,9 +275,36 @@ body,html {
 }
 
 .library{
+    overflow: visible;
+    background-color: rgba(52,61,70, 0.5);
+    display: flex;
+    justify-content: space-around;
     border: 2px solid black;
-    height: 25%;
+    border-radius: 10px;
+    height: 15%;
     width: 100%;
+}
+
+.library > * {
+    pointer-events: all;
+    height: 100%;
+    width: 100%;
+    margin-left: 5%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#nodeJS{
+    background-image: url("../images/Logos/nodejsLogo.png");
+}
+
+#react{
+    background-image: url("../images/Logos/reactLogo.png");
+}
+
+#jquery{
+    background-image: url("../images/Logos/jqueryLogo.png");
 }
 
 .layer1{
