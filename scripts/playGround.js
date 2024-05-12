@@ -238,7 +238,7 @@ function moveElements(lastHoveredTile, layer, tileId, layerToPromote) {
     transitionTimeline.fromTo(currentActiveLayer.div, {x:0}, {x: window.innerWidth})
     currentActiveElements.forEach((element, index) => {
         if (index === 0){return} //don't move the container holding the elements
-        transitionTimeline.fromTo(element, {x: 0}, {x: window.innerWidth}, "-=0.495");
+        transitionTimeline.fromTo(element, {x: 0}, {x: window.innerWidth, ease: "power1.out"}, "-=0.495");
     })
     //converting to object
     currentActiveLayer = layerToPromote
