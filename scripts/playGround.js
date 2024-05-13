@@ -58,7 +58,7 @@ function turnTiles(tile, layer, tileNumber) {
                 }, "-=0.495")
                 break;
             default:
-                console.log("error")
+                console.log("error @ turnTiles()")
         }
 
         animatedArray.push(tile)
@@ -122,17 +122,19 @@ function setLayer (layer){
                 gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic",  onComplete: ()=> reverse(tile) })
                 lastHoveredTile = tile;
             })
+            if(layer !== 0){
+                switch(parseInt(tile.id) % 2){
+                    case 0:
+                        gsap.set(tile, {y: -window.innerHeight - boxesSize})
+                        break;
+                    case 1:
+                        gsap.set(tile, {y: window.innerHeight + boxesSize})
+                        break;
+                    default:
+                        console.log("error @ setLayer")
+                }
 
-            // tile.addEventListener("click", () => {
-            //     if(!timer) {
-            //         timer = true;
-            //         setTimeout(() => {
-            //             turnTiles(tile, 2);
-            //             setZIndex();
-            //             timer = false;
-            //         }, 200)
-            //     }
-            // })
+            }
 
         }
     }
@@ -188,9 +190,96 @@ function getMouseSpeed(e) {
     return scaledSpeed;
 }
 
+let animatePreviewTimeLine = gsap.timeline({overwrite: true}) //belongs to previewLayer
+
+function reversePreviewAnimations(array){ //used to reverse the previous preview tween when selecting another element
+    if (array) {
+        animatePreviewTimeLine.to(array, {
+            width: "43%",
+            border: "solid 1px dimgray",
+            margin: "3%",
+            padding: "1%",
+            duration: 0.5,
+            ease: "power4.inOut"
+        }, )
+    }
+}
+
+let previewElementsArray = document.querySelectorAll(".projectDemo")
+let resizePin = document.getElementById("layer2dropdown");
+let resizePinBounds = resizePin.getBoundingClientRect()
+let lastClickedPreview;
+
+previewElementsArray.forEach((element, index) => {
+    let elementBounds = element.getBoundingClientRect()
+    element.addEventListener("click", () => {
+        reversePreviewAnimations(lastClickedPreview)
+        switch (index % 2) {
+            case 0:
+                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"})
+                animatePreviewTimeLine.to(previewElementsArray[index + 1], {
+                    width: "0%",
+                    border: "0",
+                    margin: "0",
+                    padding: "0",
+                    duration: 0.5,
+                    ease: "power4.inOut"
+                },"<")
+                lastClickedPreview = [element, previewElementsArray[index + 1]]
+                break;
+            case 1:
+                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"}, )
+                animatePreviewTimeLine.to(previewElementsArray[index - 1], {
+                    width: "0%",
+                    border: "0",
+                    margin: "0",
+                    padding: "0",
+                    duration: 0.5,
+                    ease: "power4.inOut"
+                },"<")
+                lastClickedPreview = [element, previewElementsArray[index - 1]]
+                break;
+            default:
+                console.log("error @ previewElementsArray")
+        }
+        gsap.to(resizePin, {left: 0, top:elementBounds.top + (resizePinBounds.height/2), duration: 1, ease: "power4.inOut"})
+    })
+    // element.addEventListener("mouseleave", () => {
+    //     switch (index % 2) {
+    //         case 0:
+    //             gsap.to(element, {maxWidth: "43%", duration: 0.5, ease: "power4.inOut"})
+    //             gsap.to(previewElementsArray[index + 1], {
+    //                 width: "100%",
+    //                 border: "solid 1px dimgray",
+    //                 margin: "3%",
+    //                 padding: "1%",
+    //                 duration: 1,
+    //                 ease: "power4.inOut"
+    //             })
+    //             break;
+    //         case 1:
+    //             gsap.to(element, {maxWidth: "43%", duration: 0.5, ease: "power4.inOut"})
+    //             gsap.to(previewElementsArray[index - 1], {
+    //                 width: "100%",
+    //                 border: "solid 1px dimgray",
+    //                 margin: "3%",
+    //                 padding: "1%",
+    //                 duration: 1,
+    //                 ease: "power4.inOut"
+    //             })
+    //             break;
+    //         default:
+    //             console.log("error @ previewElementsArray")
+    //     }
+    // });
+});
+
 document.addEventListener('mousemove', function(e) {
     tileForce = getMouseDirection(e) * getMouseSpeed(e)
-});
+    //currentActiveLayer is object with int:, div:
+})
+
+
 
 let layerToPromote;//variable to hold which layer to promote
 buttons.forEach((button) => { // entrance of transition animations
@@ -210,9 +299,12 @@ buttons.forEach((button) => { // entrance of transition animations
                 playSkillsAnimations()
             }
             if (button.innerText === "Projects") {
+                if (lastHoveredTile === null) {
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[2].length / 2)]
+                }
                 animationIncre = 0;
                 layerToPromote = {int: 2, div: layer2Content};
-                turnTiles(lastHoveredTile, 2, 0)
+                moveElements(lastHoveredTile, 2, 0, layerToPromote)
 
             }
             if (button.innerText === "Contact") {
@@ -330,8 +422,16 @@ function playSkillsAnimations(){
 }
 
 gsap.set(layer1Content.children[0],{x: window.innerWidth})
-// gsap.set(layer2Content,{x: window.innerWidth})
+gsap.set(layer2Content.children[0], {x: window.innerWidth})
+
 // gsap.set(layer3Content,{x: window.innerWidth})
+
+gsap.set(previewElementsArray, {
+    width: "43%",
+    border: "solid 1px dimgray",
+    margin: "3%",
+    padding: "1%",
+    })
 
 
 
