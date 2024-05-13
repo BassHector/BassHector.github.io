@@ -3,6 +3,10 @@ export class customFunctions {
     static clamp(value, min, max) {
         return Math.min(Math.max(value, min), max);
     }
+
+    static percentage(partialValue, totalValue) {
+        return (100 * partialValue) / totalValue;
+    }
     static relativePercentage(baseValue, totalBase, targetValue) {
         if (totalBase === 0) { // Prevent division by zero
             return 0;

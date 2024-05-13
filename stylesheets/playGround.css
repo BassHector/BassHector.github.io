@@ -24,11 +24,18 @@
     perspective: 800px;
 }
 
+body::-webkit-scrollbar-button {
+    width: 0;
+}
 
 body,html {
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-image: url("../images/BASSHECTORLOGO.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
 }
 
 strong {
@@ -39,8 +46,9 @@ strong {
     height: 100vh;
     width: 100vw;
 }
-
+/* 00000000000000000000000000000000000000000000000000000000000000000000000000000*/
 #layer0{
+    display: flex;
     z-index: 888;
     position: absolute;
     top: 0;
@@ -61,13 +69,18 @@ strong {
 }
 
 .Intro {
+    text-align: center;
     display: flex;
     flex-direction: column;
     position: relative;
     margin-right: 5%;
     max-width: 50%;
     max-height: 100%
+}
 
+.Intro h1 {
+    color: white;
+    font-size: 4rem;
 }
 
 .Intro p{
@@ -75,7 +88,7 @@ strong {
     color: white;
     font-weight: bold;
     text-align: center;
-    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    font-size: 3rem;
 }
 
 #imgme {
@@ -93,8 +106,7 @@ strong {
     width: 100%;
     flex-grow: 1;
     margin-top: auto;
-
-
+    margin-bottom: 2%;
 }
 
 .NavBar{
@@ -110,7 +122,6 @@ strong {
 }
 
 .button{
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +141,7 @@ strong {
 }
 
 .button:hover{
-    background-color: #32C6FF;
+    background-color: #39ff14;
     /*box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);*/
 }
 
@@ -140,39 +151,12 @@ strong {
     box-shadow:         inset 0px 0px 85px rgba(0,0,0,0.4);
 }
 
-.headerP {
-    font-size: 3vw;
-}
-
-@media (max-width: 480px) {
-    .ImageOfMe {
-        display: block;
-    }
-    .Intro {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        width: 100vw;
-        margin-right: 0;
-        max-width: 100%;
-    }
-    .Intro p{
-        font-size: 2.5vw;
-    }
-    #headerP{
-        font-size: 3.5vw;
-    }
-    #imgme{
-        height: 50%
-    }
-
-    .button{
-        line-height: var(--navHeightHalf);
-        font-size: 4vw;
-    }
-}
 
 
+
+
+
+/* 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111*/
 #layer1{
     position: absolute;
     z-index: 3;
@@ -201,7 +185,18 @@ strong {
 }
 
 .skillsContainer{
+    overflow: auto;
+    color: white;
+    text-align: center;
     display: flex;
+    flex-direction: column;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 100%;
+    width: 100%;
+}
+
+.skillsContainer{
     height: 100vh;
 }
 
@@ -239,17 +234,6 @@ strong {
     background-image: url("../images/Logos/jsLogo.png");
 }
 
-.skillsContainer{
-    overflow: auto;
-    color: white;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    padding-left: 5%;
-    padding-right: 5%;
-    height: 100%;
-    width: 100%;
-}
 .skillsContainer p{
     margin: 0;
     padding: 2%;
@@ -307,6 +291,98 @@ strong {
     background-image: url("../images/Logos/jqueryLogo.png");
 }
 
+/* 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222*/
+
+#layer2{
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.projectsContainer{
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    text-align: center;
+}
+
+.projectsContainer > h1{
+    overflow: visible;
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    /*word-spacing: -5px;*/
+}
+
+.projects {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 1px -1px 27px 0px rgba(0,0,0,0.75);
+}
+
+.projectsHolder {
+    background-color: rgba(52,61,70, 0.5);
+    pointer-events: all;
+
+    display: flex;
+    flex-wrap: wrap;
+    height: 200%;
+    width: 100%;
+
+}
+
+.projectsHolder > * {
+    background-size: 200%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    pointer-events: all;
+}
+
+.projectDemo{
+    border: solid 1px dimgray;
+    border-radius: 10px;
+    margin: 3%;
+    padding: 1%;
+    height: auto;
+    width: 43%;
+    box-shadow: 1px -1px 27px 0px rgba(0,0,0,0.75);
+}
+
+#PDemo0{
+    background-image: url("../images/Previews/matterJSPreview.png");
+}
+
+#PDemo1{
+    background-image: url("../images/Previews/emberPreview.png");
+}
+
+#PDemo2{
+    background-image: url("../images/Previews/shutterPreview.png");
+}
+
+#PDemo3{
+
+}
+
+#PDemo4{
+
+}
+
+#PDemo5{
+
+}
+
 .layer1{
     background-color: #ff6b32;
 }
@@ -336,4 +412,101 @@ strong {
 .skillsGold{
     font-size: small;
     color: #ffc000;
+}
+
+#layer2dropdown{
+    width: 3%;
+    height: 20%;
+    background-color: white;
+    position: absolute;
+    z-index: 889;
+    left: -300px;
+
+}
+
+@media (min-width: 0px) and (max-width: 500px) {
+
+    .ImageOfMe {
+        flex-direction: column;
+    }
+    .Intro {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100vw;
+        margin-right: 0;
+        max-width: 100%;
+    }
+    .Intro p{
+        font-size: clamp(0.5rem, 2.5vw, 2rem)
+    }
+    .Intro h1{
+        padding-top: 0;
+        font-size: clamp(1rem, 4vw, 2.5rem);
+    }
+    #imgme{
+        height: 40%
+    }
+
+    .button{
+        line-height: var(--navHeightHalf);
+        font-size: 4vw;
+    }
+    .nav{
+        padding: 5%;
+    }
+
+    .NavBar{
+        padding-bottom: 5%;
+    }
+    .projectsHolder{
+        height: 100%;
+    }
+}
+
+@media (min-width: 501px) and (max-width: 900px) {
+    .ImageOfMe {
+        flex-direction: column;
+    }
+
+    .Intro {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100vw;
+        margin-right: 0;
+        max-width: 100%;
+        padding-left: 5%;
+        padding-right: 5%;
+
+    }
+    .Intro p{
+        font-size: clamp(1rem, 2.5vw, 1.5rem)
+    }
+    .Intro h1{
+        font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    #imgme{
+        height: 35%
+    }
+    .button{
+        line-height: var(--navHeightHalf);
+        font-size: 4vw;
+    }
+    .NavBar{
+        padding: 5%;
+    }
+    .nav {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        flex-grow: 3;
+        margin-top: auto;
+        padding-bottom: 2%;
+    }
+    .projectsHolder{
+        height: 150%;
+    }
 }
