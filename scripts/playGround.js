@@ -192,7 +192,7 @@ function getMouseSpeed(e) {
 
 let animatePreviewTimeLine = gsap.timeline({overwrite: true}) //belongs to previewLayer
 
-function reversePreviewAnimations(array){ //used to reverse the previous preview tween when selecting another element
+function reversePreviewAnimations(array, removePin){ //used to reverse the previous preview tween when selecting another element
     if (array) {
         animatePreviewTimeLine.to(array, {
             width: "43%",
@@ -203,20 +203,53 @@ function reversePreviewAnimations(array){ //used to reverse the previous preview
             ease: "power4.inOut"
         }, )
     }
+    if(removePin){
+        animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"})
+        animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},"<")
+        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.5, ease: "elastic"})
+        animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 1, ease: "power4.inOut"})
+    }
 }
 
 let previewElementsArray = document.querySelectorAll(".projectDemo")
 let resizePin = document.getElementById("layer2dropdown");
 let resizePinBounds = resizePin.getBoundingClientRect()
+let xLines = document.querySelectorAll(".line")
 let lastClickedPreview;
+
+resizePin.addEventListener("click", (e) => {
+    reversePreviewAnimations(lastClickedPreview, true)
+    lastClickedPreview = null;
+})
 
 previewElementsArray.forEach((element, index) => {
     let elementBounds = element.getBoundingClientRect()
+    resizePinBounds = resizePin.getBoundingClientRect()
     element.addEventListener("click", () => {
+        animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},)
+        animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},"<")
+        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.2, ease: "elastic",})
+        animatePreviewTimeLine.to(resizePin, {
+            left: 0,
+            width: "3%",
+            height: "6%",
+            top: elementBounds.top + (elementBounds.height / 2) - (resizePinBounds.height),
+            duration: 1,
+            ease: "power4.inOut"
+        })
+        animatePreviewTimeLine.to(xLines[0], {rotation: 135, height: "100%", duration: 0.2, ease: "elastic"})
+        animatePreviewTimeLine.to(xLines[1], {rotation: -135, height: "100%", duration: 0.2, ease: "elastic"},"<")
         reversePreviewAnimations(lastClickedPreview)
+        if (lastClickedPreview) {
+            if (element === lastClickedPreview[0]) {
+                reversePreviewAnimations(lastClickedPreview, true)
+                lastClickedPreview = null;
+                return
+            }
+        }
         switch (index % 2) {
             case 0:
-                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"})
+                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"},"<")
                 animatePreviewTimeLine.to(previewElementsArray[index + 1], {
                     width: "0%",
                     border: "0",
@@ -224,11 +257,11 @@ previewElementsArray.forEach((element, index) => {
                     padding: "0",
                     duration: 0.5,
                     ease: "power4.inOut"
-                },"<")
+                }, "<")
                 lastClickedPreview = [element, previewElementsArray[index + 1]]
                 break;
             case 1:
-                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"}, )
+                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, ease: "power4.inOut"},"<")
                 animatePreviewTimeLine.to(previewElementsArray[index - 1], {
                     width: "0%",
                     border: "0",
@@ -236,13 +269,14 @@ previewElementsArray.forEach((element, index) => {
                     padding: "0",
                     duration: 0.5,
                     ease: "power4.inOut"
-                },"<")
+                }, "<")
                 lastClickedPreview = [element, previewElementsArray[index - 1]]
                 break;
             default:
                 console.log("error @ previewElementsArray")
         }
-        gsap.to(resizePin, {left: 0, top:elementBounds.top + (resizePinBounds.height/2), duration: 1, ease: "power4.inOut"})
+
+
     })
     // element.addEventListener("mouseleave", () => {
     //     switch (index % 2) {
