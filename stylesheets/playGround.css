@@ -342,11 +342,11 @@ strong {
 }
 
 .projectsHolder > * {
-    background-size: 200%;
+    background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
-
     pointer-events: all;
+    cursor: pointer;
 }
 
 .projectDemo{
@@ -415,13 +415,25 @@ strong {
 }
 
 #layer2dropdown{
+    pointer-events: all;
+    border: solid 3px dimgray;
+    border-radius: 10px;
     width: 3%;
-    height: 20%;
-    background-color: white;
+    height: 6%;
     position: absolute;
+    background-color: darkred;
     z-index: 889;
-    left: -300px;
+    top: -500px;
+    cursor: pointer;
+}
 
+.line {
+    position: absolute;
+    border-radius: 10px;
+    width: 5%;
+    height: 100%;
+    left: 47.5%;
+    background-color: white;
 }
 
 @media (min-width: 0px) and (max-width: 500px) {
@@ -460,7 +472,7 @@ strong {
         padding-bottom: 5%;
     }
     .projectsHolder{
-        height: 100%;
+        height: 150%;
     }
 }
 
