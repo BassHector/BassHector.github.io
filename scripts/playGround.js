@@ -211,23 +211,25 @@ function reversePreviewAnimations(array, removePin){ //used to reverse the previ
             margin: "3%",
             duration: 0.5,
             ease: "power4.inOut"
-        }, "<xBox-=1")
+        }, ">-0.2")
         gsap.to(array[0].childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(0rem)"})
         animatePreviewTimeLine.to(array[0].childNodes[3].childNodes[1],{opacity: 0, duration: 1, ease: "power4.inOut", pointerEvents: "none"})
     }
     if(removePin){
-        animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"})
-        animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},"<")
-        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.5, ease: "elastic"})
-        animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 1, ease: "power4.inOut"})
+        animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true})
+        animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true},"<")
+        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.5, ease: "elastic", overwrite: true})
+        animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 1, ease: "power4.inOut", overwrite: true})
     }
 }
 
+const mainProjectContainer = document.getElementById('projects');
 let previewElementsArray = document.querySelectorAll(".projectDemo")
 let resizePin = document.getElementById("layer2dropdown");
 let resizePinBounds = resizePin.getBoundingClientRect()
 let xLines = document.querySelectorAll(".line")
 let lastClickedPreview;
+let previewTimeout = null;
 
 resizePin.addEventListener("click", (e) => {
     reversePreviewAnimations(lastClickedPreview, true)
@@ -235,70 +237,91 @@ resizePin.addEventListener("click", (e) => {
 })
 
 previewElementsArray.forEach((element, index) => {
-    let elementBounds = element.getBoundingClientRect()
     resizePinBounds = resizePin.getBoundingClientRect()
     element.addEventListener("click", () => {
-        // if (lastClickedPreview) {
-        //     if (element === lastClickedPreview[0]) {
-        //         // reversePreviewAnimations(lastClickedPreview, true)
-        //         // lastClickedPreview = null;
-        //         return
-        //     }
-        // }
-        animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},"xBox")
-        animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"},"<")
-        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.2, ease: "elastic",})
-        animatePreviewTimeLine.to(resizePin, {
-            left: 0,
-            width: "3%",
-            height: "6%",
-            top: elementBounds.top + (elementBounds.height / 2) - (resizePinBounds.height),
-            duration: 1,
-            ease: "power4.inOut"
-        })
-        animatePreviewTimeLine.to(xLines[0], {rotation: 135, height: "100%", duration: 0.2, ease: "elastic"}, )
-        animatePreviewTimeLine.to(xLines[1], {rotation: -135, height: "100%", duration: 0.2, ease: "elastic"},"<")
-        reversePreviewAnimations(lastClickedPreview)
-        switch (index % 2) {
-            case 0:
-                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, border: "solid 1px transparent", boxShadow: "1px -1px 27px 0px rgba(0,0,0,0.0)", ease: "power4.inOut"},"<xBox-=1")
-                animatePreviewTimeLine.to(previewElementsArray[index + 1], {
-                    width: "0%",
-                    border: "0",
-                    margin: "0",
-                    duration: 0.5,
-                    ease: "power4.inOut"
-                }, "<")
-                lastClickedPreview = [element, previewElementsArray[index + 1]]
-                gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
-                animatePreviewTimeLine.to(element.childNodes[3].childNodes[1],{pointerEvents: "all", opacity: 1, text: {
-                        value: "Falling Letters",
-                        newClass: "projectsText",
-                        speed: 1,
-                    }, })
-                break;
-            case 1:
-                animatePreviewTimeLine.to(element, {width: "94%", duration: 1, border: "solid 1px transparent", boxShadow: "1px -1px 27px 0px rgba(0,0,0,0.0)", ease: "power4.inOut"},"<xBox-=1")
-                animatePreviewTimeLine.to(previewElementsArray[index - 1], {
-                    width: "0%",
-                    border: "0",
-                    margin: "0",
-                    duration: 0.5,
-                    ease: "power4.inOut"
-                }, "<")
-                lastClickedPreview = [element, previewElementsArray[index - 1]]
-                gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
-                animatePreviewTimeLine.to(element.childNodes[3].childNodes[1],{pointerEvents: "all", opacity: 1, text: {
-                        value: "Falling Letters",
-                        newClass: "projectsText",
-                        speed: 1,
-                    }, })
-                break;
-            default:
-                console.log("error @ previewElementsArray")
+        if (previewTimeout === null) { //timer to let the animations catch up
+            previewTimeout = true;
+            setTimeout(() => {
+                previewTimeout = null;
+            }, 2000)
+            mainProjectContainer.scrollTo({top: element.offsetTop - (element.offsetHeight/2), behavior: "smooth"});//scrollTo is a great method :)
+            animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"}, "xBox")
+            animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"}, "<")
+            animatePreviewTimeLine.to(resizePin, {
+                width: "1%",
+                left: "1%",
+                height: "20%",
+                duration: 0.2,
+                ease: "elastic",
+            })
+
+            animatePreviewTimeLine.to(resizePin, {
+                left: 0,
+                width: "3%",
+                height: "6%",
+                top: element.offsetTop + (element.offsetHeight / 2) - (resizePinBounds.width / 2),
+                duration: 1,
+                ease: "power4.inOut"
+            })
+            animatePreviewTimeLine.to(xLines[0], {rotation: 135, height: "100%", duration: 0.2, ease: "elastic"},)
+            animatePreviewTimeLine.to(xLines[1], {rotation: -135, height: "100%", duration: 0.2, ease: "elastic"}, "<")
+            reversePreviewAnimations(lastClickedPreview)
+            switch (index % 2) {
+                case 0:
+                    animatePreviewTimeLine.to(element, {
+                        width: "94%",
+                        duration: 1,
+                        border: "solid 1px transparent",
+                        boxShadow: "1px -1px 27px 0px rgba(0,0,0,0.0)",
+                        ease: "power4.inOut"
+                    }, "<xBox-=1")
+                    animatePreviewTimeLine.to(previewElementsArray[index + 1], {
+                        width: "0%",
+                        border: "0",
+                        margin: "0",
+                        duration: 0.5,
+                        ease: "power4.inOut"
+                    }, "<")
+                    lastClickedPreview = [element, previewElementsArray[index + 1]]
+                    gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
+                    animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
+                        pointerEvents: "all", opacity: 1, text: {
+                            value: "Falling Letters",
+                            newClass: "projectsText",
+                            speed: 1,
+                        },
+                    })
+                    break;
+                case 1:
+                    animatePreviewTimeLine.to(element, {
+                        width: "94%",
+                        duration: 1,
+                        border: "solid 1px transparent",
+                        boxShadow: "1px -1px 27px 0px rgba(0,0,0,0.0)",
+                        ease: "power4.inOut"
+                    }, "<xBox-=1")
+                    animatePreviewTimeLine.to(previewElementsArray[index - 1], {
+                        width: "0%",
+                        border: "0",
+                        margin: "0",
+                        duration: 0.5,
+                        ease: "power4.inOut"
+                    }, "<")
+                    lastClickedPreview = [element, previewElementsArray[index - 1]]
+                    gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
+                    animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
+                        pointerEvents: "all", opacity: 1, text: {
+                            value: "Falling Letters",
+                            newClass: "projectsText",
+                            speed: 1,
+                        },
+                    })
+                    break;
+                default:
+                    console.log("error @ previewElementsArray")
+            }
+
         }
-
-
     })
 });
 
@@ -312,7 +335,6 @@ document.addEventListener('mousemove', function(e) {
 let layerToPromote;//variable to hold which layer to promote
 buttonWrappers.forEach((button) => { // entrance of transition animations
     button.addEventListener("click", () => {
-        console.log(button.innerText)
         if(isAnimating === false) {
             isAnimating = true;
             setTimeout(() => {isAnimating = false}, 4000)
