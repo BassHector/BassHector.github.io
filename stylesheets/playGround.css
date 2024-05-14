@@ -498,7 +498,7 @@ p {
 
 #layer2dropdown{
     pointer-events: all;
-    border: solid 3px dimgray;
+    border: solid 3px white;
     border-radius: 10px;
     width: 3%;
     height: 6%;
