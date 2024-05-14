@@ -219,7 +219,7 @@ function reversePreviewAnimations(array, removePin){ //used to reverse the previ
         animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true})
         animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true},"<")
         animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.5, ease: "elastic", overwrite: true})
-        animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 1, ease: "power4.inOut", overwrite: true})
+        animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 0.5, ease: "power4.inOut"})
     }
 }
 
@@ -230,6 +230,7 @@ let resizePinBounds = resizePin.getBoundingClientRect()
 let xLines = document.querySelectorAll(".line")
 let lastClickedPreview;
 let previewTimeout = null;
+const projectsTextArray = ["Falling Letters", "Embers Landing Page", "Blinds Carousel", "PseudoParaJS", " i dunno yet", "some other Project"]
 
 resizePin.addEventListener("click", (e) => {
     reversePreviewAnimations(lastClickedPreview, true)
@@ -284,13 +285,6 @@ previewElementsArray.forEach((element, index) => {
                     }, "<")
                     lastClickedPreview = [element, previewElementsArray[index + 1]]
                     gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
-                    animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
-                        pointerEvents: "all", opacity: 1, text: {
-                            value: "Falling Letters",
-                            newClass: "projectsText",
-                            speed: 1,
-                        },
-                    })
                     break;
                 case 1:
                     animatePreviewTimeLine.to(element, {
@@ -309,18 +303,17 @@ previewElementsArray.forEach((element, index) => {
                     }, "<")
                     lastClickedPreview = [element, previewElementsArray[index - 1]]
                     gsap.to(element.childNodes[1], {duration: 1, ease: "power4.inOut", filter: "blur(1rem)"})
-                    animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
-                        pointerEvents: "all", opacity: 1, text: {
-                            value: "Falling Letters",
-                            newClass: "projectsText",
-                            speed: 1,
-                        },
-                    })
                     break;
                 default:
                     console.log("error @ previewElementsArray")
             }
-
+            animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
+                pointerEvents: "all", opacity: 1, text: {
+                    value: projectsTextArray[index],
+                    newClass: "projectsText",
+                    speed: 1,
+                },
+            })
         }
     })
 });
