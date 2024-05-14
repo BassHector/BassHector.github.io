@@ -42,6 +42,17 @@ strong {
     font-weight: bold !important;
 }
 
+h1 {
+    overflow: visible;
+    text-align: center;
+    color: white;
+    font-size: 4rem;
+}
+
+p {
+    overflow: visible;
+}
+
 #mainContainer{
     height: 100vh;
     width: 100vw;
@@ -80,7 +91,7 @@ strong {
 
 .Intro h1 {
     color: white;
-    font-size: 4rem;
+    font-size: clamp(1.5rem, 4vw, 4rem);
 }
 
 .Intro p{
@@ -88,7 +99,8 @@ strong {
     color: white;
     font-weight: bold;
     text-align: center;
-    font-size: 3rem;
+    font-size: clamp(1rem, 2.5vw, 3rem)
+
 }
 
 #imgme {
@@ -121,39 +133,67 @@ strong {
     width: 100%;
 }
 
-.button{
+.buttonWrapper{
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    background: linear-gradient(144deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 21%, rgba(0,0,0,1) 34%, rgba(0,0,0,1) 65%, rgba(255,255,255,1) 79%, rgba(255,255,255,1) 100%);;
+    background-size: 600% 600%;
     margin-right: 5%;
     margin-left: 5%;
-    text-align: center;
-    font-size: 2vw;
     pointer-events: all;
     width: 100%;
     height: auto;
-    border: solid 5px white;
     border-radius: 10px;
-    transition: all 0.5s ease;
+    transition: background 0.5s ease;
     cursor: pointer;
     box-shadow: 2px 1px 20px 0px rgba(0,0,0,0.8);
+
 }
 
-.button:hover{
+.button{
+    margin: 2%;
+    display: flex;
+    background-color: #ff6b32;;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    font-size: 2vw;
+    width: 100%;
+    height: auto;
+    transition: all 0.5s ease;
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.buttonWrapper:hover{
+    animation: buttonFlash 0.5s ;
+}
+
+@keyframes buttonFlash {
+    0% {
+        background-position: 0 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+
+
+}
+
+.buttonWrapper:hover >.button{
     background-color: #39ff14;
     /*box-shadow: 2px 1px 50px 0px rgba(50,196,255,0.8);*/
 }
+
 
 .vignette {
     -webkit-box-shadow: inset 0px 0px 85px rgba(0,0,0,0.4);
     -moz-box-shadow:    inset 0px 0px 85px rgba(0,0,0,0.4);
     box-shadow:         inset 0px 0px 85px rgba(0,0,0,0.4);
 }
-
-
-
-
 
 
 /* 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111*/
@@ -313,11 +353,7 @@ strong {
 }
 
 .projectsContainer > h1{
-    overflow: visible;
-    text-align: center;
-    font-size: 1.5rem;
-    color: white;
-    /*word-spacing: -5px;*/
+
 }
 
 .projects {
@@ -333,7 +369,6 @@ strong {
 .projectsHolder {
     background-color: rgba(52,61,70, 0.5);
     pointer-events: all;
-
     display: flex;
     flex-wrap: wrap;
     height: 200%;
@@ -353,26 +388,55 @@ strong {
     border: solid 1px dimgray;
     border-radius: 10px;
     margin: 3%;
-    padding: 1%;
     height: auto;
     width: 43%;
     box-shadow: 1px -1px 27px 0px rgba(0,0,0,0.75);
 }
 
+.demoLink{
+    display: flex;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    text-shadow: 1px -1px 27px 0px rgba(0,0,0,0.75);
+}
+
 #PDemo0{
-    background-image: url("../images/Previews/matterJSPreview.png");
+    background-image: url("../images/Gifs/matterJSLetters.gif");
+    background-position: 50% 100%;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+
 }
 
 #PDemo1{
-    background-image: url("../images/Previews/emberPreview.png");
+    background-image: url("../images/Gifs/embersLandingPage.gif");
+    background-position: 50% 100%;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
 }
 
 #PDemo2{
-    background-image: url("../images/Previews/shutterPreview.png");
+    background-image: url("../images/Gifs/shutter.gif");
+    background-size: cover;
+    background-position: 50% 100%;
+    height: 100%;
+    width: 100%;
 }
 
 #PDemo3{
-
+    background-image: url("../images/Gifs/psuedoPara.gif");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
 }
 
 #PDemo4{
@@ -380,6 +444,24 @@ strong {
 }
 
 #PDemo5{
+
+}
+
+/* 3333333333333333333333333333333333333333333333333333333333333333333333333333333 */
+
+#layer3{
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.mainContainerLayer3{
+    height: 100%;
+    width: 100%;
+    /*background-color: rgba(0, 0, 0, 0.5);*/
 
 }
 
@@ -427,6 +509,11 @@ strong {
     cursor: pointer;
 }
 
+.projectsText{
+    position: absolute;
+    color: white;
+}
+
 .line {
     position: absolute;
     border-radius: 10px;
@@ -448,13 +535,15 @@ strong {
         width: 100vw;
         margin-right: 0;
         max-width: 100%;
+        padding-left: 5%;
+        padding-right: 5%;
     }
     .Intro p{
-        font-size: clamp(0.5rem, 2.5vw, 2rem)
+        font-size: clamp(1rem, 2.5vw, 2rem)
     }
     .Intro h1{
         padding-top: 0;
-        font-size: clamp(1rem, 4vw, 2.5rem);
+        font-size: clamp(1rem, 4vw, 3rem);
     }
     #imgme{
         height: 40%
@@ -465,11 +554,17 @@ strong {
         font-size: 4vw;
     }
     .nav{
-        padding: 5%;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        flex-grow: 3;
+        margin-top: auto;
+        padding-bottom: 2%;
     }
 
     .NavBar{
-        padding-bottom: 5%;
+        padding: 5%;
     }
     .projectsHolder{
         height: 150%;
@@ -493,7 +588,7 @@ strong {
 
     }
     .Intro p{
-        font-size: clamp(1rem, 2.5vw, 1.5rem)
+        font-size: clamp(1rem, 2.3vw, 1.3rem)
     }
     .Intro h1{
         font-size: clamp(1.5rem, 4vw, 2rem);
