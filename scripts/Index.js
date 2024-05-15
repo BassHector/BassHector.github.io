@@ -336,58 +336,75 @@ document.addEventListener('mousemove', function(e) {
 
 
 let layerToPromote;//variable to hold which layer to promote
-buttonWrappers.forEach((button) => { // entrance of transition animations
-    button.addEventListener("click", () => {
-        if(isAnimating === false) {
-            isAnimating = true;
-            setTimeout(() => {isAnimating = false}, 4000)
+
+function swapPage(button){
+    if(isAnimating === false) {
+        isAnimating = true;
+        setTimeout(() => {isAnimating = false}, 4000)
+        animationIncre = 0;
+        everyTileElement[0].textContent = button.innerText;
+        if (button.innerText === "Skills") {
+
+            if (lastHoveredTile === null) {
+                if(allBoxesLayer[currentActiveLayer.int]) {
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                }
+            }
             animationIncre = 0;
-            if (button.innerText === "Skills") {
-                if (lastHoveredTile === null) {
-                    if(allBoxesLayer[currentActiveLayer.int]) {
-                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
-                    }
-                }
-                animationIncre = 0;
-                layerToPromote = {int: 1, div: layer1Content};
-                moveElements(lastHoveredTile, 1, 0, layerToPromote)
-                playSkillsAnimations()
-            }
-            if (button.innerText === "Projects") {
-                if (lastHoveredTile === null) {
-                    if(allBoxesLayer[currentActiveLayer.int]) {
-                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
-                    }
-                }
-                animationIncre = 0;
-                layerToPromote = {int: 2, div: layer2Content};
-                moveElements(lastHoveredTile, 2, 0, layerToPromote)
-
-            }
-            if (button.innerText === "Contact") {
-                console.log(allBoxesLayer)
-                if (lastHoveredTile === null) {
-                    if(allBoxesLayer[currentActiveLayer.int]) {
-                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
-                    }
-                }
-                animationIncre = 0;
-                layerToPromote = {int: 3, div: layer3Content};
-                moveElements(lastHoveredTile, 3, 0, layerToPromote)
-            }
-            if (button.innerText === "Home") {
-                if (lastHoveredTile === null) {
-                    if(allBoxesLayer[currentActiveLayer.int]) {
-                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
-                    }
-                }
-                animationIncre = 0;
-                layerToPromote = {int: 0, div: layer0Content};
-                moveElements(lastHoveredTile, 0, 0, layerToPromote)
-
-            }
+            layerToPromote = {int: 1, div: layer1Content};
+            moveElements(lastHoveredTile, 1, 0, layerToPromote)
+            playSkillsAnimations()
         }
-    });
+        if (button.innerText === "Projects") {
+            if (lastHoveredTile === null) {
+                if(allBoxesLayer[currentActiveLayer.int]) {
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                }
+            }
+            animationIncre = 0;
+            layerToPromote = {int: 2, div: layer2Content};
+            moveElements(lastHoveredTile, 2, 0, layerToPromote)
+
+        }
+        if (button.innerText === "Contact") {
+            console.log(allBoxesLayer)
+            if (lastHoveredTile === null) {
+                if(allBoxesLayer[currentActiveLayer.int]) {
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                }
+            }
+            animationIncre = 0;
+            layerToPromote = {int: 3, div: layer3Content};
+            moveElements(lastHoveredTile, 3, 0, layerToPromote)
+        }
+        if (button.innerText === "Home") {
+            if (lastHoveredTile === null) {
+                if(allBoxesLayer[currentActiveLayer.int]) {
+                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                }
+            }
+            animationIncre = 0;
+            layerToPromote = {int: 0, div: layer0Content};
+            moveElements(lastHoveredTile, 0, 0, layerToPromote)
+
+        }
+    }
+}
+
+let touchHandled = false;
+function handlePageSwap(event){
+    if (event.type === 'touchstart') {
+        touchHandled = true;
+    } else if (event.type === 'click' && touchHandled) {
+        touchHandled = false;
+        return;
+    }
+    everyTileElement[0].textContent = "hi";
+    swapPage(event.currentTarget);
+}
+buttonWrappers.forEach((button) => {
+    button.addEventListener("click", handlePageSwap);
+    button.addEventListener("touchstart", handlePageSwap);
 });
 //takes in current active layer objects vvvvv
 let movingFromLastLayer = false;
