@@ -306,9 +306,9 @@ p {
 
 .library > * {
     pointer-events: all;
-    height: 100%;
-    width: 100%;
-    margin-left: 5%;
+    height:100%;
+    width:15%;
+
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -671,4 +671,70 @@ p {
     .projectsHolder{
         height: 150%;
     }
+}
+
+/* laptops */
+
+@media (max-height: 901px) and (min-width: 1000px) {
+    .ImageOfMe{
+        display: flex;
+        height: 100%;
+        width: 100%;
+    }
+
+    .Intro {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin-right: 5%;
+        max-width: 50%;
+        max-height: 100%
+    }
+
+    h1{
+
+        font-size: clamp(1rem, 2vw, 2rem);
+    }
+
+    .Intro h1{
+        max-height: fit-content;
+        font-size: clamp(1.5rem, 3.5vw, 2rem)
+    }
+
+    p {
+        font-size: clamp(1rem, 2.5vw, 3rem);
+    }
+
+    .Intro br{
+
+    }
+    .Intro p{
+        max-height: fit-content;
+        font-size: clamp(0.5rem, 2vw, 2rem);
+    }
+
+    .button{
+        line-height: var(--navHeightHalf);
+        max-height: 20%;
+        font-size: 2vw;
+    }
+
+    .NavBar{
+        padding: 5%;
+    }
+    .nav {
+        max-height: fit-content;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        flex-grow: 3;
+        margin-top: auto;
+        padding-bottom: 2%;
+    }
+    .projectsHolder{
+        height: 150%;
+    }
+
 }
