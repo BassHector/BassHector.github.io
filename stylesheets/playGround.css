@@ -54,8 +54,7 @@ p {
     position: relative;
     color: white;
     font-weight: bold;
-    text-align: center;
-    font-size: clamp(1rem, 2.5vw, 3rem)
+    font-size: clamp(1rem, 2vw, 3rem)
 }
 
 
@@ -86,7 +85,6 @@ p {
 }
 
 .Intro {
-    text-align: center;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -97,6 +95,7 @@ p {
 
 .Intro h1 {
     color: white;
+    text-align: left;
     font-size: clamp(1.5rem, 4vw, 4rem);
 }
 
@@ -144,7 +143,7 @@ p {
     pointer-events: all;
     width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 1rem;
     transition: background 0.5s ease;
     cursor: pointer;
     box-shadow: 2px 1px 20px 0px rgba(0,0,0,0.8);
@@ -155,7 +154,7 @@ p {
     margin: 2%;
     display: flex;
     background-color: #ff6b32;
-    border-radius: 10px;
+    border-radius: 1rem;
     align-items: center;
     justify-content: center;
     color: white;
@@ -169,7 +168,7 @@ p {
 }
 
 .buttonWrapper:hover{
-    animation: buttonFlash 0.5s ;
+    animation: buttonFlash 0.5s ease-in-out ;
 }
 
 @keyframes buttonFlash {
@@ -197,6 +196,7 @@ p {
     left: 0;
     height: 100vh;
     width: 100vw;
+    pointer-events: none;
 }
 
 #mainContainerLayer1{
@@ -335,6 +335,7 @@ p {
     left: 0;
     height: 100vh;
     width: 100vw;
+    pointer-events: none;
 }
 
 
@@ -451,13 +452,67 @@ p {
     left: 0;
     height: 100vh;
     width: 100vw;
+    pointer-events: none;
 }
 
 .mainContainerLayer3{
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
     /*background-color: rgba(0, 0, 0, 0.5);*/
+}
 
+#socials{
+    padding-top: 5%;
+    height: 80%;
+    width: 100%;
+    background-color: rgba(0,0,0, 0.3);
+}
+
+#socials > * {
+    display: flex;
+    height: 30%;
+    width: 70%;
+    padding-top: 5%;
+}
+
+#socials h1{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+#socials > * > *{
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+}
+
+.socialImg{
+    height: 100%;
+    width: 20%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 1rem;
+    cursor: pointer;
+    pointer-events: all;
+    margin-right: 5%;
+}
+
+#linkInContactImg{
+    background-image: url("../images/Logos/LinkedInLogo.png");
+}
+
+#gitHubContactImg {
+    background-image: url("../images/Logos/GitHubLogo.png");
+}
+
+.mainContainerLayer3 .nav{
+    max-height: 20%;
 }
 
 .layer1{

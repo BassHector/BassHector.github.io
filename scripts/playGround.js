@@ -5,7 +5,7 @@ let layer0Content = document.getElementById('layer0')
 let layer1Content = document.getElementById('layer1')
 let layer2Content = document.getElementById('layer2')
 let layer3Content = document.getElementById('layer3')
-
+const allLayerContentArray = [layer0Content, layer1Content, layer2Content, layer3Content]
 
 
 // use querySelectorAll because somebody thought it was a good idea to place the nodes inside a htmlcollection instead of an array when using getElementsByClassName
@@ -18,7 +18,7 @@ let boxMaxDim = Math.min(mainContainerBounds.width, mainContainerBounds.height);
 //must be a numbered squared
 const numberOfBox = 64;
 
-const boxesSize = Math.ceil(boxMaxDim / Math.sqrt(numberOfBox));
+let  boxesSize = Math.ceil(boxMaxDim / Math.sqrt(numberOfBox));
 const boxesPerRow = Math.ceil(mainContainerBounds.width / boxesSize);
 const boxesPerColumn = Math.round(mainContainerBounds.height / boxesSize);
 const numberOfLayers = 3;
@@ -33,8 +33,14 @@ let currentActiveElements = Array.from(layer0Content.querySelectorAll('*'))
 
 let transitionTimeline = gsap.timeline({duration: 0.5, ease: "elastic", smoothChildTiming: true})
 
-function turnTiles(tile, layer, tileNumber) {
+function turnTiles(tile, layer, tileNumber,) {
     lastHoveredTile = null;
+    if(movingFromLastLayer){ // this specifically if the user is transitioning from the last layer, since it doesn't have tiles.
+        animationIncre = boxesPerLayer/4
+        setZIndex(layer)
+        movingFromLastLayer = false; //reset the flag when done
+        return
+    }
     if(tile){
         //vvvvvv literally couldn't pass the tile to gsap, so I had to put it in this variable first...for some reason
         let theCurrentTile = tile;
@@ -83,17 +89,15 @@ function turnTiles(tile, layer, tileNumber) {
     }
 }
 
-function transitContactPage () {
-
-}
 //responsible for return boxes back to original positions
 function setZIndex(layer) {
+    // console.log(animationIncre)
     if (animationIncre === boxesPerLayer/4){ //so pushing the current index upwards, started late. midway through animation. /4 so that it starts 1/4th the way through.
 
+        // console.log(allBoxesLayer)
         animatedArray = [];
         for(let i = 0; i < allBoxesLayer[layer].length; i++){
             transitionTimeline.to(allBoxesLayer[layer][i], {y: 0 }, "-=0.495")
-            ///////SNAJKDLJIFASBLJKFBLJKSBFALJKBFLJKFBSJLK I STOPPED HERE!!!
             allBoxesLayer[layer][i].style.zIndex = `${numberOfLayers}`
             allBoxesLayer[layer][i].style.pointerEvents = ""
         }
@@ -105,7 +109,9 @@ function setZIndex(layer) {
 }
 
 
-
+let everyTileElement = [];
+let everyTileElementStyleLeft = []; //for resizing the tiles on resize
+let everyTileElementStyleTop = [];
 function setLayer (layer){
     const layerNumber = layer * 1000;
     let currentTileId = 0;
@@ -130,7 +136,9 @@ function setLayer (layer){
 
             tile.addEventListener("mouseover", () => {
                 gsap.fromTo(tile, {rotateY: 0}, {rotateY: tileForce, duration: scaledSpeed, ease: "elastic",  onComplete: ()=> reverse(tile) })
-                lastHoveredTile = tile;
+                // if(!isAnimating) { //turning this off for now
+                //     lastHoveredTile = tile;
+                // }
             })
             if(layer !== 0){
                 switch(parseInt(tile.id) % 2){
@@ -145,7 +153,9 @@ function setLayer (layer){
                 }
 
             }
-
+            everyTileElement.push(tile)
+            everyTileElementStyleLeft.push(parseInt(tile.style.left) - 2); //the -1 is account for the border
+            everyTileElementStyleTop.push(parseInt(tile.style.top) - 2);
         }
     }
 }
@@ -334,7 +344,9 @@ buttonWrappers.forEach((button) => { // entrance of transition animations
             animationIncre = 0;
             if (button.innerText === "Skills") {
                 if (lastHoveredTile === null) {
-                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[1].length / 2)]
+                    if(allBoxesLayer[currentActiveLayer.int]) {
+                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                    }
                 }
                 animationIncre = 0;
                 layerToPromote = {int: 1, div: layer1Content};
@@ -343,7 +355,9 @@ buttonWrappers.forEach((button) => { // entrance of transition animations
             }
             if (button.innerText === "Projects") {
                 if (lastHoveredTile === null) {
-                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[2].length / 2)]
+                    if(allBoxesLayer[currentActiveLayer.int]) {
+                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                    }
                 }
                 animationIncre = 0;
                 layerToPromote = {int: 2, div: layer2Content};
@@ -351,15 +365,21 @@ buttonWrappers.forEach((button) => { // entrance of transition animations
 
             }
             if (button.innerText === "Contact") {
+                console.log(allBoxesLayer)
+                if (lastHoveredTile === null) {
+                    if(allBoxesLayer[currentActiveLayer.int]) {
+                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                    }
+                }
                 animationIncre = 0;
                 layerToPromote = {int: 3, div: layer3Content};
                 moveElements(lastHoveredTile, 3, 0, layerToPromote)
-                lastHoveredTile = null;
-
             }
             if (button.innerText === "Home") {
                 if (lastHoveredTile === null) {
-                    lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[0].length / 2)]
+                    if(allBoxesLayer[currentActiveLayer.int]) {
+                        lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
+                    }
                 }
                 animationIncre = 0;
                 layerToPromote = {int: 0, div: layer0Content};
@@ -370,7 +390,7 @@ buttonWrappers.forEach((button) => { // entrance of transition animations
     });
 });
 //takes in current active layer objects vvvvv
-
+let movingFromLastLayer = false;
 function moveElements(lastHoveredTile, layer, tileId, layerToPromote) {
     transitionTimeline.fromTo(currentActiveLayer.div, {x:0}, {x: window.innerWidth})
     currentActiveElements.forEach((element, index) => {
@@ -386,6 +406,14 @@ function moveElements(lastHoveredTile, layer, tileId, layerToPromote) {
     currentActiveElements.forEach((element) => {
         transitionTimeline.fromTo(element, {x: -window.innerWidth}, {x: 0}, "-=0.495");
     })
+
+    if (!lastHoveredTile){
+        movingFromLastLayer = true;
+    }
+    if(layer === 3){
+        layer3Content.style.zIndex = "888";
+    }
+    // console.log(lastHoveredTile)
     turnTiles(lastHoveredTile, layer, tileId)
 }
 
@@ -467,8 +495,9 @@ function playSkillsAnimations(){
     }
 }
 
-gsap.set(layer1Content.children[0],{x: window.innerWidth})
+gsap.set(layer1Content.children[0], {x: window.innerWidth})
 gsap.set(layer2Content.children[0], {x: window.innerWidth})
+gsap.set(layer3Content.children[0], {x: window.innerWidth})
 
 
 gsap.set(previewElementsArray, {
@@ -479,24 +508,36 @@ gsap.set(previewElementsArray, {
 
 })
 
+//this belongs to resizing the tiles
+let tileResizeScaleFactorX = 1;
+let tileResizeScaleFactorY = 1;
+let tileSizeDifferenceX, tileSizeDifferenceY;
+//logic for resizing the tiles
+window.addEventListener("resize", (e) => {
+    tileResizeScaleFactorX = customFunctions.percentage(window.innerWidth, mainContainerBounds.width) / 100;
+    tileResizeScaleFactorY = customFunctions.percentage(window.innerHeight, mainContainerBounds.height) / 100;
+    tileSizeDifferenceX = tileResizeScaleFactorX * boxesSize
+    tileSizeDifferenceY = tileResizeScaleFactorY * boxesSize
+    everyTileElement.forEach((tile, index) => {
+        gsap.set(tile, {
+            width: Math.ceil(boxesSize * tileResizeScaleFactorX),
+            height: Math.ceil(boxesSize * tileResizeScaleFactorY),
+            left: (everyTileElementStyleLeft[index]) * tileResizeScaleFactorX,
+            top:(everyTileElementStyleTop[index]) * tileResizeScaleFactorY});
+
+    })
+    allBoxesLayer.forEach((layer, index) =>{ //reset all non-active tiles
+        if(index !== currentActiveLayer.int){
+            gsap.set(layer, {y: -window.innerHeight - boxesSize})
+        }
+    })
+    for(let i = 0; i < allLayerContentArray.length; i++) { //reset non-active elements
+        if(i !== currentActiveLayer.int) {
+            gsap.set(allLayerContentArray[i].children[0], {x: window.innerWidth})
+        }
+    }
+})
 
 
-
-// if(allBoxesLayer[layer][i].style.zIndex !== `${numberOfLayers - 1}`) { // if the layer you're going to is behind it, don't animate it
-//     ((index) => { //invoke this immediately
-//         gsap.to(allBoxesLayer[layer][i], {
-//             y: 0,
-//             stagger: {
-//                 each: 0.05,
-//                 from: 'end',
-//                 grid: 'auto',
-//                 ease: 'power2.inOut',
-//             },
-//             onStart: () => {
-//                 allBoxesLayer[layer][index].style.zIndex = `${numberOfLayers}`
-//                 allBoxesLayer[layer][index].style.pointerEvents = ""}
-//         })
-//     })(i);
-// document.addEventListener("click", () =>{console.log(isAnimating)});
 
 
