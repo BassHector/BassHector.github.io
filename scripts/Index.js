@@ -91,10 +91,8 @@ function turnTiles(tile, layer, tileNumber,) {
 
 //responsible for return boxes back to original positions
 function setZIndex(layer) {
-    // console.log(animationIncre)
     if (animationIncre === boxesPerLayer/4){ //so pushing the current index upwards, started late. midway through animation. /4 so that it starts 1/4th the way through.
 
-        // console.log(allBoxesLayer)
         animatedArray = [];
         for(let i = 0; i < allBoxesLayer[layer].length; i++){
             transitionTimeline.to(allBoxesLayer[layer][i], {y: 0 }, "-=0.495")
@@ -230,6 +228,7 @@ function reversePreviewAnimations(array, removePin){ //used to reverse the previ
         animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true},"<")
         animatePreviewTimeLine.to(resizePin, {width: "1%", left: resizePin.offsetLeft, height: "20%", duration: 0.5, ease: "elastic", overwrite: true})
         animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 0.5, ease: "power4.inOut"})
+        lastClickedElement = null;
     }
 }
 
@@ -238,11 +237,11 @@ let previewElementsArray = document.querySelectorAll(".projectDemo")
 let resizePin = document.getElementById("layer2dropdown");
 let resizePinBounds = resizePin.getBoundingClientRect()
 let xLines = document.querySelectorAll(".line")
-let lastClickedPreview;
+let lastClickedPreview, lastClickedElement;
 let previewTimeout = null;
 const projectsTextArray = ["Falling Letters", "Embers Landing Page", "Blinds Carousel", "PseudoParaJS", "The Portfolio", "Under Construction"]
 
-resizePin.addEventListener("click", (e) => {
+resizePin.addEventListener("click", () => {
     reversePreviewAnimations(lastClickedPreview, true)
     lastClickedPreview = null;
 })
@@ -250,9 +249,13 @@ resizePin.addEventListener("click", (e) => {
 previewElementsArray.forEach((element, index) => {
     resizePinBounds = resizePin.getBoundingClientRect()
     element.addEventListener("click", (e) => {
+        if(lastClickedElement === index) { // used for elements without links, effectively cancels the animation
+            return
+        }
         if (previewTimeout === null) { //timer to let the animations catch up
             previewTimeout = true;
             setTimeout(() => {
+                lastClickedElement = index; // used for elements without links, effectively cancels the animation
                 previewTimeout = null;
             }, 2000)
             mainProjectContainer.scrollTo({top: element.offsetTop - (element.offsetHeight/2), behavior: "smooth"});//scrollTo is a great method :)
@@ -295,7 +298,6 @@ previewElementsArray.forEach((element, index) => {
             }
             animatePreviewTimeLine.to(xLines[0], {rotation: 135, height: "100%", duration: 0.2, ease: "elastic"},)
             animatePreviewTimeLine.to(xLines[1], {rotation: -135, height: "100%", duration: 0.2, ease: "elastic"}, "<")
-            console.log(lastClickedPreview)
             reversePreviewAnimations(lastClickedPreview)
             switch (index % 2) {
                 case 0:
@@ -386,7 +388,6 @@ function swapPage(button){
 
         }
         if (button.innerText.trim() === "Contact") {
-            console.log(allBoxesLayer)
             if (lastHoveredTile === null) {
                 if(allBoxesLayer[currentActiveLayer.int]) {
                     lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
@@ -450,7 +451,6 @@ function moveElements(lastHoveredTile, layer, tileId, layerToPromote) {
     if(layer === 3){
         layer3Content.style.zIndex = "888";
     }
-    // console.log(lastHoveredTile)
     turnTiles(lastHoveredTile, layer, tileId)
 }
 
@@ -481,31 +481,113 @@ function playSkillsAnimations(){
 
         let jsContent = '&lt;script&gt;<br>' +
             'function displayMessage() {<br>' +
-            '&nbsp;&nbsp;&nbsp;&nbsp;console.log("Hello, World!"); <br>' +
-            '}&lt;br&gt;' +
-            '<br>' +
-            'for(let i = 0; i &lt; 5; i++) {<br>' +
-            '&nbsp;&nbsp;&nbsp;&nbsp;elementArray.push(i);<br>' +
-            'if(elementArray.length &lt; totalElement) { <br>' +
-            'return(i) <br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;console.log("Hello, World!");<br>' +
             '}<br>' +
-            '&lt;/script&gt;<br>';
+            '<br>' +
+            'for (let i = 0; i &lt; 5; i++) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;elementArray.push(i);<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;if (elementArray.length &lt; totalElement) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return i;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '}<br>' +
+            '<br>' +
+            'function setLayer(layer) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;const layerNumber = layer * 1000;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;let currentTileId = 0;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;for (let i = 0; i &lt; boxesPerRow; i++) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (let j = 0; j &lt; boxesPerColumn; j++) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTileId++;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let tile = document.createElement("div");<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.id = `${layerNumber + currentTileId}`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.className = `layer${layer + 1}`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.position = "absolute";<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.border = window.innerWidth &lt; 900 ? "1px solid #333333" : "1px solid #111111";<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.height = `${boxesSize}px`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.width = `${boxesSize}px`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.top = `${boxesSize * j}px`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.left = `${boxesSize * i}px`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.zIndex = `${numberOfLayers - layer}`;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (parseInt(tile.style.zIndex) !== numberOfLayers) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.style.pointerEvents = "none";<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.setAttribute("name", "tile");<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mainContainer.appendChild(tile);<br>' +
+            '<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tile.addEventListener("mouseover", () => {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gsap.fromTo(tile, { rotateY: 0 }, { rotateY: tileForce, duration: scaledSpeed, ease: "elastic", onComplete: () => reverse(tile) });<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>' +
+            '<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (layer !== 0) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (parseInt(tile.id) % 2) {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 0:<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gsap.set(tile, { y: -window.innerHeight - boxesSize });<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 1:<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gsap.set(tile, { y: window.innerHeight + boxesSize });<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log("error @ setLayer");<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;everyTileElement.push(tile);<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;everyTileElementStyleLeft.push(parseInt(tile.style.left) - 2);<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;everyTileElementStyleTop.push(parseInt(tile.style.top) - 2);<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;}<br>' +
+            '}&lt;/script&gt;<br>';
+
         let cssContent = '&lt;style&gt;<br>' +
             '.Container {<br>' +
             '&nbsp;&nbsp;&nbsp;&nbsp;background-color: #f0f0f0;<br>' +
             '&nbsp;&nbsp;&nbsp;&nbsp;margin: 20px;<br>' +
             '&nbsp;&nbsp;&nbsp;&nbsp;padding: 10px;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;border: 2px solid #ccc;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;border-radius: 10px;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;box-shadow: 0 4px 8px rgba(0,0,0,0.1);<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;transition: all 0.3s ease;<br>' +
+            '}<br>' +
+            '.Container:hover {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;background-color: #e0e0e0;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;box-shadow: 0 8px 16px rgba(0,0,0,0.2);<br>' +
             '}<br>' +
             'p {<br>' +
             '&nbsp;&nbsp;&nbsp;&nbsp;color: blue;<br>' +
             '&nbsp;&nbsp;&nbsp;&nbsp;font-size: 16px;<br>' +
-            '}&lt;/style&gt;<br>';
+            '&nbsp;&nbsp;&nbsp;&nbsp;line-height: 1.5;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;margin-bottom: 10px;<br>' +
+            '}<br>' +
+            'h1 {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;color: #333;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;font-size: 24px;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;text-align: center;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;margin-top: 0;<br>' +
+            '}<br>' +
+            'ul {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;list-style-type: none;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;padding: 0;<br>' +
+            '}<br>' +
+            'li {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;background-color: #ddd;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;margin: 5px 0;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;padding: 5px;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;border-radius: 5px;<br>' +
+            '}<br>' +
+            'a {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;color: red;<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;text-decoration: none;<br>' +
+            '}<br>' +
+            'a:hover {<br>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;text-decoration: underline;<br>' +
+            '}<br>' +
+            '&lt;/style&gt;<br>';
+
 
         skillsTimeline.to(htmlBox, {
             text: {
                 value: htmlContent,
                 newClass: "skillsGreen",
-                speed: 1,
+                speed: 3,
             }
         })
         skillsTimeline.to(cssBox, {
@@ -550,7 +632,7 @@ let tileResizeScaleFactorX = 1;
 let tileResizeScaleFactorY = 1;
 let tileSizeDifferenceX, tileSizeDifferenceY;
 //logic for resizing the tiles
-window.addEventListener("resize", (e) => {
+window.addEventListener("resize", () => {
     tileResizeScaleFactorX = customFunctions.percentage(window.innerWidth, mainContainerBounds.width) / 100;
     tileResizeScaleFactorY = customFunctions.percentage(window.innerHeight, mainContainerBounds.height) / 100;
     tileSizeDifferenceX = tileResizeScaleFactorX * boxesSize
@@ -610,7 +692,6 @@ function darkMode (){
 }
 
 const darkModeToggle = document.getElementById("darkMode")
-const toggleIcons = document.querySelectorAll(".icon")
 
 darkModeToggle.addEventListener("click", () => {
     darkModeToggle.classList.toggle("persistent");

@@ -42,7 +42,6 @@
     box-sizing: border-box;
     font-family: "JetBrains Mono", serif;
     text-shadow: -1px 2px 6px rgba(0,0,0,0.6);
-    overflow: hidden;
     perspective: 800px;
 }
 
@@ -88,19 +87,17 @@ h1 {
     overflow: visible;
     text-align: center;
     color: black;
-    font-size: clamp(1.5rem, 4vw, 4rem);
+    font-size: clamp(1.5rem, 3.7vw, 4rem);
 }
 
 p {
-    overflow: visible;
+    margin-top: 0;
     position: relative;
-    max-height: 20%;
     color: black;
     font-weight: bold;
-    padding-top: 2%;
+    padding: 2% 0 0;
     font-size: clamp(1.5rem, 1.5vw, 3rem)
 }
-
 
 #mainContainer{
     height: 100dvh;
@@ -135,6 +132,10 @@ p {
     margin-right: 5%;
     max-width: 50%;
     max-height: 100%
+}
+
+.Intro h1{
+    text-align: left;
 }
 
 .DarkMode{
@@ -214,13 +215,6 @@ p {
     background-image: url("../images/Logos/DarkMode.png");
 }
 
-.Intro h1 {
-    text-align: left;
-    font-size: clamp(2rem, 3vw, 4rem);
-}
-
-
-
 #imgme {
     background-image: url(../images/styledME.png);
     background-repeat: no-repeat;
@@ -231,8 +225,10 @@ p {
 }
 
 .IntroWrapper{
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 80%;
 
 }
 
@@ -335,6 +331,10 @@ p {
     width: 100vw;
 }
 
+#mainContainerLayer1 h1{
+    font-size: clamp(1.5rem, 2.2vw, 3rem)
+}
+
 #mainContainerLayer1 > strong{
     font-size: x-large;
     padding-top: 10px;
@@ -369,7 +369,7 @@ p {
 .skills{
     pointer-events: all;
     background-color: rgba(52, 61, 70, 0.5);
-    overflow: auto;
+    overflow: hidden;
     height: 100%;
     width: 100%;
     border: solid 2px black;
@@ -497,7 +497,7 @@ p {
 
 .projectsHolder {
     background-color: rgba(52,61,70, 0.5);
-    overflow: auto;
+    overflow: hidden;
     pointer-events: all;
     display: flex;
     flex-wrap: wrap;
@@ -607,10 +607,10 @@ p {
 }
 
 #socials{
-    padding-top: 5%;
     height: 80%;
     width: 100%;
     background-color: rgba(0,0,0, 0.0);
+
 }
 
 
@@ -687,16 +687,19 @@ p {
 }
 
 .skillsGreen{
+    overflow: visible; !important;
     font-size: xx-large;
     color:greenyellow;
 }
 
 .skillsPlum{
+    overflow: visible; !important;
     font-size: xx-large;
     color: #26E1FF;
 }
 
 .skillsGold{
+    overflow: visible; !important;
     font-size: xx-large;
     color: #ffc000;
 }
@@ -776,23 +779,30 @@ p {
 #NavBarContact .buttonWrapper >.button{
     background-color: #39ff14;
 }
-#buttonWrapperContactHome > .button{
+#buttonWrapperContactHome:hover > .button{
     background-color: #ff6b32;
 }
-#buttonWrapperContactSkills > .button{
+#buttonWrapperContactSkills:hover > .button{
     background-color: #B026FF;
 }
-#buttonWrapperContactProjects > .button{
+#buttonWrapperContactProjects:hover > .button{
     background-color: #32C6FF;
 }
 
 
 @media (min-width: 0px) and (max-width: 500px) {
+    #socials{
+        padding-top: 13%;
+    }
+    #socials h1{
+        font-size: clamp(1rem, 2vw, 4rem)
+    }
 
     .ImageOfMe {
         flex-direction: column;
     }
     .Intro {
+
         display: flex;
         flex-direction: column;
         position: relative;
@@ -805,17 +815,29 @@ p {
     }
 
     .IntroWrapper{
-
+        pointer-events: auto;
+        overflow: auto;
+        background-color: rgba(52,61,70, 0.4);
+        border-radius: 10px;
+        border: solid 1px black;
     }
     p{
+        max-height: none;
         font-size: clamp(1.5rem, 3.5vw, 4rem)
     }
     .Intro p{
-        font-size: clamp(0.7rem, 2.5vw, 2rem)
+        font-size: clamp(1rem, 2vw, 3rem);
+
     }
     .Intro h1{
-        font-size: clamp(1rem, 2.5vw, 3rem)
+        padding-top: 0;
+        margin-top: 0;
+        font-size: clamp(1.3rem, 3.5vw, 4rem)
     }
+    .Intro br{
+        display: none;
+    }
+
 
     .Intro .nav {
         max-height: 10dvh;
@@ -830,9 +852,13 @@ p {
         height: 40%
     }
 
+    #mainContainerLayer1 h1{
+        font-size: clamp(1.5rem, 3.5vw, 3.5rem)
+    }
+
     .button{
         line-height: var(--navHeightHalf);
-        font-size: 4vw;
+        font-size: 3.5vw;
     }
     .nav{
         display: flex;
@@ -845,7 +871,7 @@ p {
     }
 
     .NavBar{
-        padding: 5%;
+        padding: 0;
     }
     .projectsHolder{
         height: 150%;
@@ -881,6 +907,9 @@ p {
     .ImageOfMe {
         flex-direction: column;
     }
+    .Intro br{
+        display: none;
+    }
     .Intro {
         display: flex;
         flex-direction: column;
@@ -894,15 +923,21 @@ p {
     }
 
     .IntroWrapper{
-
+        pointer-events: auto;
+        overflow: auto;
+        background-color: rgba(52,61,70, 0.4);
+        border-radius: 10px;
+        border: solid 1px black;
     }
     p{
+        max-height: none;
         font-size: clamp(1.5rem, 3.5vw, 4rem)
     }
     .Intro p{
         font-size: clamp(0.7rem, 2.5vw, 2rem)
     }
     .Intro h1{
+        margin-top: 0;
         font-size: clamp(1.5rem, 2.5vw, 3rem)
     }
 
@@ -934,7 +969,7 @@ p {
     }
 
     .NavBar{
-        padding: 5%;
+        padding: 0;
     }
     .projectsHolder{
         height: 150%;
@@ -959,67 +994,52 @@ p {
     }
 }
 
+@media (min-width: 501px) and (max-height: 1080px) {
+    h1 {
+        font-size: clamp(1.5rem, 3.5vw, 4rem)
+    }
 
-@media (max-height: 901px) and (min-width: 1000px) {
-    .ImageOfMe{
-        display: flex;
-        height: 100%;
+    .Intro h1 {
+        text-align: left;
+        font-size: clamp(1rem, 2.5vw, 4rem);
+    }
+
+    .Intro p {
+        margin-top: 0;
+        padding-top: 0;
+        font-size: clamp(1rem, 1.3vw, 4rem);
+    }
+    .socials > *{
+        padding-top: 0;
+    }
+
+    #socials h1{
+        margin: 0;
         width: 100%;
     }
+}
 
-    .Intro {
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        margin-right: 5%;
-        max-width: 50%;
-        max-height: 100%
+@media (min-width: 501px) and (max-height: 700px) {
+    h1 {
+        font-size: clamp(1.5rem, 3vw, 4rem)
     }
 
-    h1{
-
-        font-size: clamp(1rem, 2vw, 2rem);
+    .Intro h1 {
+        text-align: left;
+        font-size: clamp(1rem, 2vw, 4rem);
     }
 
-    .Intro h1{
-        max-height: fit-content;
-        font-size: clamp(1.5rem, 3.5vw, 2rem)
+    .Intro p {
+        margin-top: 0;
+        padding-top: 0;
+        font-size: clamp(1rem, 1vw, 4rem);
+    }
+    .socials > *{
+        padding-top: 0;
     }
 
-    p {
-        font-size: clamp(1rem, 2.5vw, 3rem);
-    }
-
-    .Intro br{
-
-    }
-    .Intro p{
-        max-height: fit-content;
-        font-size: clamp(0.5rem, 2vw, 2rem);
-    }
-
-    .button{
-        line-height: var(--navHeightHalf);
-        max-height: 20%;
-        font-size: 2vw;
-    }
-
-    .NavBar{
-        padding: 5%;
-    }
-    .nav {
-        max-height: fit-content;
-        display: flex;
-        flex-direction: column;
-        height: auto;
+    #socials h1{
+        margin: 0;
         width: 100%;
-        flex-grow: 3;
-        margin-top: auto;
-        padding-bottom: 2%;
     }
-    .projectsHolder{
-        height: 150%;
-    }
-
 }
