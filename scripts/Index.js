@@ -20,7 +20,7 @@ const numberOfBox = 64;
 
 let  boxesSize = Math.ceil(boxMaxDim / Math.sqrt(numberOfBox));
 const boxesPerRow = Math.ceil(mainContainerBounds.width / boxesSize);
-const boxesPerColumn = Math.round(mainContainerBounds.height / boxesSize);
+const boxesPerColumn = Math.ceil(mainContainerBounds.height / boxesSize);
 const numberOfLayers = 3;
 const boxesPerLayer = (boxesPerRow * boxesPerColumn)
 
@@ -122,7 +122,7 @@ function setLayer (layer){
             tile.id = `${layerNumber + currentTileId}`;
             tile.className = `layer${layer + 1}`
             tile.style.position = 'absolute';
-            tile.style.border = '1px solid black';
+            tile.style.border = window.innerWidth < 900 ? '1px solid #333333' : '1px solid #111111'; //light borders for mobile
             tile.style.height = `${boxesSize}px`;
             tile.style.width = `${boxesSize}px`;
             tile.style.top = `${boxesSize * j}px`;
@@ -228,7 +228,7 @@ function reversePreviewAnimations(array, removePin){ //used to reverse the previ
     if(removePin){
         animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true})
         animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic", overwrite: true},"<")
-        animatePreviewTimeLine.to(resizePin, {width: "1%", left: "1%", height: "20%", duration: 0.5, ease: "elastic", overwrite: true})
+        animatePreviewTimeLine.to(resizePin, {width: "1%", left: resizePin.offsetLeft, height: "20%", duration: 0.5, ease: "elastic", overwrite: true})
         animatePreviewTimeLine.to(resizePin, {top: "-300px", duration: 0.5, ease: "power4.inOut"})
     }
 }
@@ -240,7 +240,7 @@ let resizePinBounds = resizePin.getBoundingClientRect()
 let xLines = document.querySelectorAll(".line")
 let lastClickedPreview;
 let previewTimeout = null;
-const projectsTextArray = ["Falling Letters", "Embers Landing Page", "Blinds Carousel", "PseudoParaJS", " i dunno yet", "some other Project"]
+const projectsTextArray = ["Falling Letters", "Embers Landing Page", "Blinds Carousel", "PseudoParaJS", "The Portfolio", "Under Construction"]
 
 resizePin.addEventListener("click", (e) => {
     reversePreviewAnimations(lastClickedPreview, true)
@@ -249,7 +249,7 @@ resizePin.addEventListener("click", (e) => {
 
 previewElementsArray.forEach((element, index) => {
     resizePinBounds = resizePin.getBoundingClientRect()
-    element.addEventListener("click", () => {
+    element.addEventListener("click", (e) => {
         if (previewTimeout === null) { //timer to let the animations catch up
             previewTimeout = true;
             setTimeout(() => {
@@ -258,24 +258,44 @@ previewElementsArray.forEach((element, index) => {
             mainProjectContainer.scrollTo({top: element.offsetTop - (element.offsetHeight/2), behavior: "smooth"});//scrollTo is a great method :)
             animatePreviewTimeLine.to(xLines[0], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"}, "xBox")
             animatePreviewTimeLine.to(xLines[1], {rotation: 0, height: "100%", duration: 0.1, ease: "elastic"}, "<")
-            animatePreviewTimeLine.to(resizePin, {
-                width: "1%",
-                left: "1%",
-                height: "20%",
-                duration: 0.2,
-                ease: "elastic",
-            })
-
-            animatePreviewTimeLine.to(resizePin, {
-                left: 0,
-                width: "3%",
-                height: "6%",
-                top: element.offsetTop + (element.offsetHeight / 2) - (resizePinBounds.width / 2),
-                duration: 1,
-                ease: "power4.inOut"
-            })
+            if(window.innerWidth < 500){ //accounting for mobile @media query
+                animatePreviewTimeLine.to(resizePin, {
+                    left: previewElementsArray[0].offsetLeft,
+                    width: "10%",
+                    height: "8%",
+                    top: element.offsetTop,
+                    duration: 1,
+                    ease: "power4.inOut"
+                })
+            } else if (window.innerWidth < 900){
+                animatePreviewTimeLine.to(resizePin, {
+                    left: previewElementsArray[0].offsetLeft,
+                    width: "7%",
+                    height: "6%",
+                    top: element.offsetTop,
+                    duration: 1,
+                    ease: "power4.inOut"
+                })
+            } else {
+                animatePreviewTimeLine.to(resizePin, {
+                    width: "1%",
+                    left: "1%",
+                    height: "20%",
+                    duration: 0.2,
+                    ease: "elastic",
+                })
+                animatePreviewTimeLine.to(resizePin, {
+                    left: 0,
+                    width: "3%",
+                    height: "6%",
+                    top: element.offsetTop + (element.offsetHeight / 2),
+                    duration: 1,
+                    ease: "power4.inOut"
+                })
+            }
             animatePreviewTimeLine.to(xLines[0], {rotation: 135, height: "100%", duration: 0.2, ease: "elastic"},)
             animatePreviewTimeLine.to(xLines[1], {rotation: -135, height: "100%", duration: 0.2, ease: "elastic"}, "<")
+            console.log(lastClickedPreview)
             reversePreviewAnimations(lastClickedPreview)
             switch (index % 2) {
                 case 0:
@@ -317,6 +337,7 @@ previewElementsArray.forEach((element, index) => {
                 default:
                     console.log("error @ previewElementsArray")
             }
+
             animatePreviewTimeLine.to(element.childNodes[3].childNodes[1], {
                 pointerEvents: "all", opacity: 1, text: {
                     value: projectsTextArray[index],
@@ -342,9 +363,7 @@ function swapPage(button){
         isAnimating = true;
         setTimeout(() => {isAnimating = false}, 4000)
         animationIncre = 0;
-        everyTileElement[0].textContent = button.innerText;
-        if (button.innerText === "Skills") {
-
+        if (button.innerText.trim() === "Skills") {
             if (lastHoveredTile === null) {
                 if(allBoxesLayer[currentActiveLayer.int]) {
                     lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
@@ -355,7 +374,7 @@ function swapPage(button){
             moveElements(lastHoveredTile, 1, 0, layerToPromote)
             playSkillsAnimations()
         }
-        if (button.innerText === "Projects") {
+        if (button.innerText.trim() === "Projects") {
             if (lastHoveredTile === null) {
                 if(allBoxesLayer[currentActiveLayer.int]) {
                     lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
@@ -366,7 +385,7 @@ function swapPage(button){
             moveElements(lastHoveredTile, 2, 0, layerToPromote)
 
         }
-        if (button.innerText === "Contact") {
+        if (button.innerText.trim() === "Contact") {
             console.log(allBoxesLayer)
             if (lastHoveredTile === null) {
                 if(allBoxesLayer[currentActiveLayer.int]) {
@@ -377,7 +396,7 @@ function swapPage(button){
             layerToPromote = {int: 3, div: layer3Content};
             moveElements(lastHoveredTile, 3, 0, layerToPromote)
         }
-        if (button.innerText === "Home") {
+        if (button.innerText.trim() === "Home") {
             if (lastHoveredTile === null) {
                 if(allBoxesLayer[currentActiveLayer.int]) {
                     lastHoveredTile = allBoxesLayer[currentActiveLayer.int][Math.round(allBoxesLayer[currentActiveLayer.int].length / 2)]
@@ -399,15 +418,16 @@ function handlePageSwap(event){
         touchHandled = false;
         return;
     }
-    everyTileElement[0].textContent = "hi";
     swapPage(event.currentTarget);
 }
 buttonWrappers.forEach((button) => {
     button.addEventListener("click", handlePageSwap);
     button.addEventListener("touchstart", handlePageSwap);
 });
+
 //takes in current active layer objects vvvvv
 let movingFromLastLayer = false;
+
 function moveElements(lastHoveredTile, layer, tileId, layerToPromote) {
     transitionTimeline.fromTo(currentActiveLayer.div, {x:0}, {x: window.innerWidth})
     currentActiveElements.forEach((element, index) => {
@@ -554,6 +574,75 @@ window.addEventListener("resize", (e) => {
         }
     }
 })
+let rotateValue = 0;
+let lightMode = true;
+let darkModeClassesToSwap = ["p", "h1", ".button"]
+function darkMode (){
+    rotateValue += 180;
+    gsap.to(darkModeToggle, {rotate: rotateValue, duration: 0.1, ease: "elastic"})
+    gsap.to(".icon", {rotate: rotateValue, duration: 1, ease: "power1"})
+    if(lightMode){
+        lightMode = false;
+        gsap.to(allBoxesLayer[0],{backgroundColor: "#7A2200", ease: "easeInOut", duration: 0.5})
+        gsap.to(allBoxesLayer[1],{backgroundColor: "#5c0091", ease: "easeInOut", duration: 0.5})
+        gsap.to(allBoxesLayer[2],{backgroundColor: "#00587A", ease: "easeInOut", duration: 0.5})
+        gsap.to("body",{backgroundColor: "black", ease: "easeInOut", duration: 0.5})
+        gsap.to(darkModeClassesToSwap, {color: "white", ease: "easeInOut", duration: 0.5})
+        gsap.to("strong", {textDecoration: "underline white solid", ease: "easeInOut", duration: 0.5})
+        gsap.to(".buttonWrapper",{
+            background: "linear-gradient(144deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 21%, rgba(0,0,0,1) 34%, rgba(0,0,0,1) 65%, rgba(255,255,255,1) 79%, rgba(255,255,255,1) 100%)",
+            onComplete: transitionWrappers
+        })
+        return
+    }
+    lightMode = true;
+    gsap.to(allBoxesLayer[0],{backgroundColor: "#ff6b32", ease: "easeInOut", duration: 0.5})
+    gsap.to(allBoxesLayer[1],{backgroundColor: "#B026FF", ease: "easeInOut", duration: 0.5})
+    gsap.to(allBoxesLayer[2],{backgroundColor: "#32C6FF", ease: "easeInOut", duration: 0.5})
+    gsap.to("body",{backgroundColor: "white", ease: "easeInOut", duration: 0.5})
+    gsap.to(darkModeClassesToSwap, {color: "black", ease: "easeInOut", duration: 0.5})
+    gsap.to("strong", {textDecoration: "underline black solid", ease: "easeInOut", duration: 0.5})
+    gsap.to(".buttonWrapper",{
+        background: "linear-gradient(144deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 21%, rgba(255,255,255,1) 34%, rgba(255,255,255,1) 65%, rgba(0,0,0,1) 79%, rgba(0,0,0,1) 100%)",
+        onComplete: transitionWrappers
+    })
+
+}
+
+const darkModeToggle = document.getElementById("darkMode")
+const toggleIcons = document.querySelectorAll(".icon")
+
+darkModeToggle.addEventListener("click", () => {
+    darkModeToggle.classList.toggle("persistent");
+    darkMode()
+})
+
+const allButtonWrappers = document.querySelectorAll(".buttonWrapper")
+
+//the dom doesn't like it when gsap changes the background, so I set it myself
+function transitionWrappers(){
+    allButtonWrappers.forEach((wrapper => {
+        wrapper.style.backgroundSize = "600% 600%";
+    }))
+}
+
+
+const loadingBlanket = document.getElementById("loadingBlanket")
+document.addEventListener("DOMContentLoaded", () => {
+    gsap.to(loadingBlanket, {opacity: 0, duration: 2, ease: "ease", onComplete: removeBlanket})
+})
+
+function removeBlanket(){
+    if(loadingBlanket) {
+        loadingBlanket.remove()
+
+    }
+}
+
+
+
+
+//--webkitfillavialable
 
 
 

@@ -8,20 +8,26 @@
 </head>
 <body>
 <div class="vignette" id="mainContainer">
+    <div class="DarkMode" id="darkMode">
+        <div class="icon" id="sun"></div>
+        <div class="icon" id="moon"></div>
+    </div>
     <div id="layer0">
         <div  id="mainContainerHid">
             <div class="ImageOfMe">
                 <div id="imgme"></div>
                 <div class="Intro">
-                    <br/>
-                    <h1>Hey! I'm Hector Colon, a dedicated and creative web design student specializing in <strong style="text-decoration: underline white">front-end development</strong>.</h1>
+                    <div class="IntroWrapper">
+                        <br/>
+                        <h1>Hey! I'm Hector Colon, a dedicated and creative web design student specializing in <strong>front-end development</strong>.</h1>
+                        <br/>
+                        <p style="text-indent: 2em">
+                            With a keen eye for design and a strong commitment to delivering exceptional user experiences,
+                            I craft websites that are not only visually appealing but also <strong>highly functional and scalable</strong>.
+                        </p>
 
-                    <p>
-                        With a keen eye for design and a strong commitment to delivering exceptional user experiences,
-                        I craft websites that are not only visually appealing but also <strong style="text-decoration: underline white">highly functional and scalable</strong>.
-                    </p>
-
-                    <p>Explore my portfolio to see how I blend technical skills with artistic design to create seamless digital experiences.</p>
+                        <p style="text-indent: 2em">Explore my portfolio to see how I blend technical skills with artistic design to create seamless digital experiences.</p>
+                    </div>
                     <div class="nav">
                         <div class="NavBar" id="navBarHome">
                             <div class="buttonWrapper" id="buttonWrapperIntroSkills">
@@ -55,8 +61,8 @@
                         <div id="cssDemo"></div>
                         <div id="javascriptDemo"></div>
                     </div>
-                    <p> I am also <strong>proficient</strong> in</p>
                 </div>
+                <h1> I am also <strong>proficient</strong> in</h1>
                 <div class="library">
                     <div class="libraryLogo" id="nodeJS"></div>
                     <div class="libraryLogo" id="react"></div>
@@ -98,25 +104,25 @@
                         </div>
                         <div class="projectDemo">
                             <div id="PDemo2"></div>
-                            <a href="https://codepen.io/mylilhelper123/full/RwONvOZ">
+                            <a href="/pages/Shutter.html">
                                 <div class="demoLink" id="demoLink2"></div>
                             </a>
                         </div>
                         <div class="projectDemo">
                             <div id="PDemo3"></div>
-                            <a href="https://codepen.io/mylilhelper123/full/RwONvOZ">
+                            <a href="/pages/Psuedoparra.html">
                                 <div class="demoLink" id="demoLink3"></div>
                             </a>
                         </div>
                         <div class="projectDemo">
                             <div id="PDemo4"></div>
-                            <a href="https://codepen.io/mylilhelper123/full/RwONvOZ">
+                            <a>
                                 <div class="demoLink" id="demoLink4"></div>
                             </a>
                         </div>
                         <div class="projectDemo">
                             <div id="PDemo5"></div>
-                            <a href="https://codepen.io/mylilhelper123/full/RwONvOZ">
+                            <a>
                                 <div class="demoLink" id="demoLink5"></div>
                             </a>
                         </div>
@@ -145,14 +151,23 @@
     </div>
     <div id="layer3">
         <div class="mainContainerLayer3" id="mainContainerLayer3">
+            <h1>Let's Connect</h1>
             <div id="socials">
                 <div id="linkedIn">
                     <div class="socialImg" id="linkInContactImg"></div>
-                    <h1 id="linkInContactLink"> LinkedIn.com</h1>
+                    <a href="https://linkedin.com/in/basshector">
+                        <h1 id="linkInContactLink">https://linkedin.com/in/basshector</h1>
+                    </a>
                 </div>
                 <div id="gitHub">
                     <div class="socialImg" id="gitHubContactImg"></div>
-                    <h1 id="gitHubContactLink">GitHub.com</h1>
+                    <a href="https://github.com/BassHector">
+                        <h1 id="gitHubContactLink">https://github.com/BassHector</h1>
+                    </a>
+                </div>
+                <div id="google">
+                    <div class="socialImg" id="googleContactImg"></div>
+                        <h1 id="googleContactLink">hector.colon6752@gmail.com</h1>
                 </div>
             </div>
             <div class="nav">
@@ -170,6 +185,9 @@
             </div>
         </div>
     </div>
+    <div class="loadingBlanket" id="loadingBlanket">
+        <h1 id="loadingBlanketText">One Moment Please...</h1>
+    </div>
 </div>
 
 
@@ -177,6 +195,7 @@
 <footer>
 
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>

@@ -11,5 +11,7 @@
     <orderEntry type="library" name="svg.js" level="application" />
     <orderEntry type="library" name="gsap" level="application" />
     <orderEntry type="library" name="html2canvas" level="application" />
+    <orderEntry type="library" name="gsap" level="application" />
+    <orderEntry type="library" name="svg.js" level="application" />
   </component>
 </module>
