@@ -817,6 +817,7 @@ p {
     .IntroWrapper{
         pointer-events: auto;
         overflow: auto;
+        max-height: 60%;
         background-color: rgba(52,61,70, 0.4);
         border-radius: 10px;
         border: solid 1px black;
@@ -840,7 +841,7 @@ p {
 
 
     .Intro .nav {
-        max-height: 10dvh;
+        max-height: 20dvh;
     }
 
     h1{
@@ -871,6 +872,8 @@ p {
     }
 
     .NavBar{
+        align-items: center;
+
         padding: 0;
     }
     .projectsHolder{
@@ -925,6 +928,7 @@ p {
     .IntroWrapper{
         pointer-events: auto;
         overflow: auto;
+        max-height: 40%;
         background-color: rgba(52,61,70, 0.4);
         border-radius: 10px;
         border: solid 1px black;
